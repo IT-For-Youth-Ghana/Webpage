@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/Webpage/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- EXTREM AGGRESSIVE PRELOADING FÜR MAXIMALE PERFORMANCE -->
+    <link rel="preload" href="/Webpage/images/logo/logo.png" as="image" type="image/png">
+    <link rel="preload" href="/Webpage/images/randomPictures/UX4.jpg" as="image">
+    <link rel="preload" href="/Webpage/images/randomPictures/mireiotalking.jpg" as="image">
+    <link rel="preload" href="/Webpage/images/randomPictures/maingraduationpic.jpg" as="image">
+    <link rel="preload" href="/Webpage/images/randomPictures/studentslistening.jpg" as="image">
+    <link rel="preload" href="/Webpage/images/randomPictures/graduation.jpg" as="image">
+    <link rel="preload" href="/Webpage/images/randomPictures/groupofgirlsentrance.jpg" as="image">
+    <link rel="preload" href="/Webpage/images/randomPictures/UXcours.jpg" as="image">
+    <link rel="preload" href="/Webpage/images/people/peter.jpg" as="image">
+    
+    <!-- DNS prefetch for external resources -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <meta name="description" content="IT For Youth Ghana - Empowering youth through technology education and digital skills training">
+    <meta name="keywords" content="IT education, youth empowerment, Ghana, technology training, digital skills">
+    <meta property="og:title" content="IT For Youth Ghana">
+    <meta property="og:description" content="Empowering youth through technology education and digital skills training">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#0152be">
+    
+    <!-- AGGRESSIVE CACHING FÜR EXTREME PERFORMANCE -->
+    <meta http-equiv="Cache-Control" content="public, max-age=31536000, immutable">
+    <meta http-equiv="Expires" content="31536000">
+    
+    <!-- SERVICE WORKER REGISTRATION FÜR MAXIMALE PERFORMANCE -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+              // Sofort aktivieren für maximale Performance
+              registration.update();
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/Webpage/manifest.json">
+    
+    <!-- Apple specific meta tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="IT Youth Ghana">
+    <link rel="apple-touch-icon" href="/Webpage/images/logo/logo.png">
+    
+    <title>IT For Youth Ghana - Empowering Youth Through Technology</title>
+    
+    <!-- GitHub Pages SPA Router Script -->
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      // MIT License
+      // https://github.com/rafgraph/spa-github-pages
+      // This script checks to see if a redirect is present in the query string,
+      // converts it back into the correct url and adds it to the
+      // browser's history using window.history.replaceState(...)
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
+    <script type="module" crossorigin src="/Webpage/assets/index-DG4sxGwH.js"></script>
+    <link rel="modulepreload" crossorigin href="/Webpage/assets/vendor-Dztk_LuL.js">
+    <link rel="modulepreload" crossorigin href="/Webpage/assets/animations-D4aE4ZH-.js">
+    <link rel="modulepreload" crossorigin href="/Webpage/assets/seo-YELAgV3Z.js">
+    <link rel="stylesheet" crossorigin href="/Webpage/assets/index-DY27Wv8j.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

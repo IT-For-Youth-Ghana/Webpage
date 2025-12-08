@@ -1,0 +1,28 @@
+{
+  "name": "IT for Youth Ghana",
+  "short_name": "IT Youth Ghana",
+  "description": "Empowering Ghana's youth through technology education and digital skills training",
+  "start_url": "/Webpage/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0152be",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/Webpage/images/logo/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/Webpage/images/logo/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "social"],
+  "lang": "en",
+  "scope": "/Webpage/",
+  "prefer_related_applications": false
+}
