@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Concept homepage design for IT For Youth Ghana" />
+<title>IT For Youth Ghana — concept homepage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#FFFFFF;
+    --mist:#EEF2F8;
+    --border:#E3E8F0;
+    --ink:#11233F;
+    --ink-soft:#4A5568;
+    --navy:#0C2D5A;
+    --navy-deep:#081D3D;
+    --gold:#F5A623;
+    --gold-deep:#7A4A0F;
+    --gold-tint:#FDF1DD;
+    --teal:#157F6B;
+    --teal-deep:#0B4A3D;
+    --teal-tint:#DFF1EC;
+    --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'DM Sans',system-ui,-apple-system,sans-serif;
+    color:var(--ink);
+    background:var(--paper);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Playfair Display',Georgia,serif;font-weight:600;line-height:1.1;letter-spacing:-0.01em;}
+  a{color:inherit;}
+  svg{display:block;}
+  .container{max-width:1120px;margin:0 auto;padding:0 32px;}
+  .skip-link{position:absolute;left:-999px;top:0;background:var(--gold);color:var(--gold-deep);padding:12px 20px;border-radius:0 0 8px 0;z-index:100;font-weight:600;text-decoration:none;}
+  .skip-link:focus{left:0;}
+
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-deep);}
+  .eyebrow::before{content:"";width:16px;height:2px;background:currentColor;display:inline-block;}
+  .eyebrow--on-dark{color:var(--gold);}
+
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;border:1.5px solid transparent;cursor:pointer;transition:transform .2s ease,background .2s ease,border-color .2s ease;}
+  .btn:hover{transform:translateY(-2px);}
+  .btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+  .btn--primary{background:var(--gold);color:var(--gold-deep);}
+  .btn--primary:hover{background:#e2960a;}
+  .btn--ghost-dark{border-color:rgba(255,255,255,0.4);color:#fff;}
+  .btn--ghost-dark:hover{background:rgba(255,255,255,0.1);}
+  .btn--ghost-light{border-color:var(--ink);color:var(--ink);}
+  .btn--ghost-light:hover{background:rgba(17,35,63,0.06);}
+
+  .thread{position:fixed;left:0;top:0;width:5px;height:100vh;background:var(--navy);z-index:80;transition:background .7s ease;}
+
+  .nav{position:sticky;top:0;z-index:60;padding:20px 0;background:transparent;border-bottom:1px solid transparent;transition:background .35s ease,padding .35s ease,border-color .35s ease;}
+  .nav.nav--solid{background:rgba(248,251,255,0.94);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-color:var(--border);padding:14px 0;}
+  .nav__row{display:flex;align-items:center;justify-content:space-between;gap:24px;}
+  .nav__brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .nav__badge{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-deep) 100%);color:var(--gold);font-size:10px;font-weight:700;letter-spacing:0.04em;flex-shrink:0;}
+  .nav__wordmark{display:flex;flex-direction:column;gap:1px;}
+  .nav__wordmark strong{font-family:'Playfair Display',serif;font-size:15.5px;font-weight:700;color:#fff;line-height:1.1;transition:color .35s ease;}
+  .nav__wordmark small{font-size:9.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.55);transition:color .35s ease;}
+  .nav.nav--solid .nav__wordmark strong{color:var(--ink);}
+  .nav.nav--solid .nav__wordmark small{color:var(--ink-soft);}
+  .nav__links{display:flex;align-items:center;gap:30px;list-style:none;}
+  .nav__links a{font-size:14.5px;font-weight:500;color:rgba(255,255,255,0.85);text-decoration:none;transition:color .35s ease;}
+  .nav.nav--solid .nav__links a{color:var(--ink-soft);}
+  .nav__links a:hover{color:var(--gold);}
+  .nav.nav--solid .nav__links a:hover{color:var(--gold-deep);}
+  @media (max-width:760px){.nav__links{display:none;}}
+
+  .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;background:linear-gradient(180deg,var(--navy) 0%,var(--navy-deep) 62%,#050d1e 100%);color:#fff;overflow:hidden;padding:120px 0 100px;}
+  .hero__glow{position:absolute;inset:auto 0 0 0;height:55%;background:radial-gradient(120% 100% at 50% 100%,rgba(245,166,35,0.5),rgba(245,166,35,0) 70%);pointer-events:none;}
+  .hero__content{position:relative;width:100%;display:flex;flex-direction:column;align-items:center;gap:48px;}
+
+  .hero__capsule{position:relative;display:flex;align-items:stretch;overflow:hidden;width:100%;max-width:980px;min-height:420px;background:var(--paper);border-radius:999px 40px 40px 999px;box-shadow:0 40px 90px -30px rgba(4,10,24,0.55);opacity:0;transform:translateX(-48px) scale(0.97);animation:capsuleIn 1s cubic-bezier(.16,.84,.44,1) 0.15s forwards;}
+  @keyframes capsuleIn{to{opacity:1;transform:none;}}
+  .hero__capsule-media{flex:0 0 auto;align-self:center;width:clamp(220px,30vw,360px);aspect-ratio:1/1;margin:20px;border-radius:50%;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--gold) 0%,var(--navy) 100%);display:flex;align-items:center;justify-content:center;}
+  .hero__capsule-play{position:relative;z-index:1;width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,0.92);display:flex;align-items:center;justify-content:center;color:var(--navy);flex-shrink:0;}
+  .hero__capsule-tag{position:absolute;z-index:1;left:50%;bottom:14%;transform:translateX(-50%);font-size:11px;font-weight:500;color:#fff;background:rgba(0,0,0,0.32);padding:5px 11px;border-radius:999px;white-space:nowrap;}
+  .hero__capsule-content{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;justify-content:center;padding:44px 56px 44px 12px;}
+  .hero__heading{font-size:clamp(24px,3vw,38px);color:var(--ink);margin-bottom:16px;}
+  .hero__lead{font-size:16px;color:var(--ink-soft);max-width:44ch;margin-bottom:28px;}
+  .hero__ctas{display:flex;gap:16px;flex-wrap:wrap;}
+
+  @media (max-width:820px){
+    .hero__capsule{flex-direction:column;min-height:0;max-width:420px;border-radius:32px;box-shadow:0 24px 60px -24px rgba(4,10,24,0.5);}
+    .hero__capsule-media{width:150px;aspect-ratio:1/1;margin:28px auto 24px;}
+    .hero__capsule-play{width:44px;height:44px;}
+    .hero__capsule-content{padding:0 28px 32px;align-items:center;text-align:center;}
+    .hero__lead{max-width:38ch;}
+    .hero__ctas{justify-content:center;}
+  }
+
+  .hero__scroll{position:relative;display:inline-flex;flex-direction:column;align-items:center;gap:10px;font-size:12.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);}
+  .hero__scroll span{width:1px;height:34px;background:rgba(255,255,255,0.4);position:relative;overflow:hidden;display:block;}
+  .hero__scroll span::after{content:"";position:absolute;left:0;top:-100%;width:100%;height:100%;background:var(--gold);animation:threadDrop 2s ease-in-out infinite;}
+  @keyframes threadDrop{0%{top:-100%;}60%{top:100%;}100%{top:100%;}}
+
+  .thesis{padding:120px 0;}
+  .thesis p{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(24px,3.4vw,38px);line-height:1.35;max-width:880px;letter-spacing:-0.01em;}
+  .thesis strong{color:var(--gold-deep);font-weight:600;}
+
+  .team{padding:20px 0 100px;}
+  .team h2{font-size:clamp(26px,3.2vw,36px);max-width:560px;margin-bottom:44px;}
+  .team__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-bottom:36px;}
+  .team__card{text-align:center;padding:8px;}
+  .team__photo{position:relative;width:104px;height:104px;margin:0 auto 20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:rgba(255,255,255,0.96);text-shadow:0 1px 4px rgba(4,10,24,0.35);overflow:hidden;transition:transform .3s ease;box-shadow:0 0 0 4px var(--paper),0 0 0 6px var(--ring,var(--navy));background:linear-gradient(135deg,var(--ring,var(--navy)) 0%,var(--navy-deep) 100%);}
+  .team__card:hover .team__photo,.team__card:focus-within .team__photo{transform:scale(1.06);}
+  .team__name{font-family:'Playfair Display',serif;font-weight:700;font-size:17px;margin-bottom:4px;}
+  .team__role{font-size:13.5px;color:var(--gold-deep);font-weight:600;margin-bottom:10px;}
+  .team__tag{display:inline-block;font-size:11.5px;font-weight:500;color:var(--ink-soft);background:var(--mist);padding:5px 12px;border-radius:999px;}
+  @media (max-width:820px){.team__grid{grid-template-columns:repeat(2,1fr);row-gap:36px;}}
+
+  .story{padding:70px 0;}
+  .story__row{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+  .story__media{aspect-ratio:4/3;border-radius:var(--radius);position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:20px;}
+  .story__pattern{position:absolute;inset:0;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,0.14) 0 2px,transparent 2px 26px);}
+  .story__media-tag{position:relative;font-size:12.5px;font-weight:500;color:rgba(255,255,255,0.92);background:rgba(0,0,0,0.28);padding:6px 12px;border-radius:999px;}
+  .story--navy .story__media{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-deep) 100%);}
+  .story--gold .story__media{background:linear-gradient(135deg,var(--gold) 0%,#b9791f 100%);}
+  .story--teal .story__media{background:linear-gradient(135deg,var(--teal) 0%,var(--teal-deep) 100%);}
+  .story__content .eyebrow{margin-bottom:18px;}
+  .story h2{font-size:clamp(24px,3vw,32px);margin-bottom:16px;}
+  .story p{color:var(--ink-soft);font-size:16.5px;margin-bottom:20px;max-width:480px;}
+  .story__stat{font-weight:600;font-size:14px;margin-bottom:22px;display:inline-block;padding:7px 16px;border-radius:999px;}
+  .story--navy .story__stat{background:var(--mist);color:var(--navy);}
+  .story--gold .story__stat{background:var(--gold-tint);color:var(--gold-deep);}
+  .story--teal .story__stat{background:var(--teal-tint);color:var(--teal-deep);}
+  .story__link{font-weight:600;font-size:15px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;color:var(--navy);}
+  @media (max-width:820px){.story__row{grid-template-columns:1fr;gap:32px;}}
+
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease;}
+  .reveal.is-visible{opacity:1;transform:translateY(0);}
+
+  .impact{background:var(--navy);color:#fff;padding:100px 0;}
+  .impact h2{font-size:clamp(24px,3vw,32px);max-width:620px;margin-bottom:12px;font-weight:600;}
+  .impact > .container > p.impact__note{font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:44px;}
+  .impact__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;}
+  .impact__card svg{margin-bottom:16px;}
+  .stat-num{font-family:'Playfair Display',serif;font-size:clamp(30px,4vw,44px);font-weight:700;display:block;margin-bottom:8px;}
+  .impact__card p{font-size:13.5px;color:rgba(255,255,255,0.68);}
+  @media (max-width:820px){.impact__grid{grid-template-columns:repeat(2,1fr);row-gap:44px;}}
+
+  .voice{padding:120px 0;}
+  .voice__row{display:grid;grid-template-columns:0.9fr 1.1fr;gap:64px;align-items:center;}
+  .voice__media{aspect-ratio:16/10;border-radius:var(--radius);background:linear-gradient(135deg,var(--gold),var(--navy));position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .voice__play{position:relative;width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.92);display:flex;align-items:center;justify-content:center;color:var(--navy);}
+  .voice__duration{position:absolute;bottom:18px;right:18px;background:rgba(0,0,0,0.4);color:#fff;font-size:12px;padding:4px 10px;border-radius:999px;}
+  .voice__caption{position:absolute;bottom:18px;left:18px;background:rgba(0,0,0,0.4);color:#fff;font-size:12px;padding:4px 10px;border-radius:999px;}
+  .voice blockquote{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:clamp(22px,2.6vw,28px);line-height:1.45;margin-bottom:24px;}
+  .voice cite{font-style:normal;font-weight:600;font-size:14.5px;color:var(--ink-soft);}
+  @media (max-width:820px){.voice__row{grid-template-columns:1fr;gap:32px;}}
+
+  .involved{padding:120px 0;background:var(--mist);}
+  .involved h2{font-size:clamp(26px,3.2vw,36px);max-width:560px;margin-bottom:56px;font-weight:600;}
+  .involved__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .involved__card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:32px 28px;}
+  .involved__card svg{margin-bottom:20px;}
+  .involved__card h3{font-size:19px;margin-bottom:12px;font-weight:600;}
+  .involved__card p{color:var(--ink-soft);font-size:15px;margin-bottom:24px;}
+  @media (max-width:820px){.involved__grid{grid-template-columns:1fr;}}
+
+  footer{background:var(--navy);color:rgba(255,255,255,0.75);padding:80px 0 32px;}
+  .footer__grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:48px;margin-bottom:64px;}
+  .footer__brand{display:flex;align-items:center;gap:10px;color:#fff;margin-bottom:16px;}
+  .footer__badge{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;background:var(--gold);color:var(--ink);font-size:10px;font-weight:700;letter-spacing:0.04em;flex-shrink:0;}
+  .footer__brand strong{font-family:'Playfair Display',serif;font-size:15.5px;font-weight:700;line-height:1.2;}
+  footer p{font-size:14.5px;max-width:280px;}
+  footer h4{font-size:13px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:18px;font-weight:600;}
+  footer ul{list-style:none;display:flex;flex-direction:column;gap:12px;}
+  footer a{color:rgba(255,255,255,0.78);text-decoration:none;font-size:14.5px;}
+  footer a:hover{color:var(--gold);}
+  .footer__social{flex-direction:row;gap:16px;}
+  .footer__form{display:flex;gap:10px;margin-top:16px;}
+  .footer__form input{flex:1;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.06);color:#fff;font-size:14px;}
+  .footer__form input::placeholder{color:rgba(255,255,255,0.45);}
+  .footer__form button{padding:12px 18px;border-radius:10px;border:none;background:var(--gold);color:var(--gold-deep);font-weight:600;cursor:pointer;}
+  .footer__bottom{border-top:1px solid rgba(255,255,255,0.12);padding-top:28px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13px;}
+  @media (max-width:820px){.footer__grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:520px){.footer__grid{grid-template-columns:1fr;}}
+
+  a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .reveal{transition:none;opacity:1;transform:none;}
+    .hero__scroll span::after{animation:none;}
+    .hero__capsule{animation:none;opacity:1;transform:none;}
+    .thread{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="thread" id="thread" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <div class="container nav__row">
+    <a href="#hero" class="nav__brand">
+      <span class="nav__badge" aria-hidden="true">ITFY</span>
+      <span class="nav__wordmark">
+        <strong>IT For Youth Ghana</strong>
+        <small>Digital skills &amp; opportunity</small>
+      </span>
+    </a>
+    <ul class="nav__links">
+      <li><a href="#program-academy">What we do</a></li>
+      <li><a href="#impact">Our impact</a></li>
+      <li><a href="#thesis">Who we are</a></li>
+      <li><a href="#involved">Get involved</a></li>
+    </ul>
+    <a href="#involved" class="btn btn--primary" style="padding:11px 22px;font-size:14px;">Donate</a>
+  </div>
+</header>
+
+<main id="main-content">
+
+  <section class="hero" id="hero" data-thread="navy">
+    <div class="hero__glow"></div>
+    <div class="container hero__content">
+      <div class="hero__capsule">
+        <div class="hero__capsule-media">
+          <div class="story__pattern" aria-hidden="true"></div>
+          <span class="hero__capsule-play" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+          <span class="hero__capsule-tag">Video — graduation day, Accra</span>
+        </div>
+        <div class="hero__capsule-content">
+          <p class="eyebrow">IT For Youth Ghana</p>
+          <h1 class="hero__heading">Turning ambition into opportunity, one graduate at a time.</h1>
+          <p class="hero__lead">Every year, hundreds of young Ghanaians cross the stage — not just with a certificate, but with the skills and confidence to shape the digital economy.</p>
+          <div class="hero__ctas">
+            <a href="#program-academy" class="btn btn--primary">Meet our graduates</a>
+            <a href="#thesis" class="btn btn--ghost-light">Who we are</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero__scroll" aria-hidden="true">
+        <span></span>
+        Scroll
+      </div>
+    </div>
+  </section>
+
+  <section class="story story--navy" id="program-academy" data-thread="navy">
+    <div class="container story__row">
+      <div class="story__media reveal">
+        <div class="story__pattern" aria-hidden="true"></div>
+        <span class="story__media-tag">Video — Academy cohort, coding lab</span>
+      </div>
+      <div class="story__content reveal">
+        <p class="eyebrow">Youth Tech Academy</p>
+        <h2>A twelve-week track from curiosity to job-ready</h2>
+        <p>Cohort-based, project-driven, and built to move participants from their first line of code to a portfolio an employer will actually look at — across software, design, entrepreneurship and digital literacy tracks.</p>
+        <span class="story__stat">850+ learners through the Academy</span>
+        <br/>
+        <a href="#" class="story__link">Explore Youth Tech Academy →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="story story--gold" id="program-girls" data-thread="gold">
+    <div class="container story__row">
+      <div class="story__content reveal">
+        <p class="eyebrow">Girls in Tech</p>
+        <h2>Belonging in tech, on purpose</h2>
+        <p>Mentorship, confidence, and a technical track built specifically for young women stepping into Ghana's digital economy — not an afterthought bolted onto a general programme.</p>
+        <br/>
+        <a href="#" class="story__link">Explore Girls in Tech →</a>
+      </div>
+      <div class="story__media reveal">
+        <div class="story__pattern" aria-hidden="true"></div>
+        <span class="story__media-tag">Photo — Girls in Tech cohort</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="story story--teal" id="program-enterprise" data-thread="teal">
+    <div class="container story__row">
+      <div class="story__media reveal">
+        <div class="story__pattern" aria-hidden="true"></div>
+        <span class="story__media-tag">Video — venture pitch day</span>
+      </div>
+      <div class="story__content reveal">
+        <p class="eyebrow">Entrepreneurship Hub</p>
+        <h2>From technical skill to sustainable venture</h2>
+        <p>Practical business support for graduates ready to turn what they built in training into something that pays — pricing, clients, and the parts of running a business a coding class doesn't cover.</p>
+        <br/>
+        <a href="#" class="story__link">Explore the Entrepreneurship Hub →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="impact" id="impact" data-thread="navy">
+    <div class="container">
+      <p class="eyebrow eyebrow--on-dark">The work, in numbers</p>
+      <h2 class="reveal">Real numbers from three of the programmes above.</h2>
+      <p class="impact__note">Each figure below is specific to the programme named — not a combined organisation-wide total.</p>
+      <div class="impact__grid">
+        <div class="impact__card reveal">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="1.6" aria-hidden="true"><path d="M4 6a2 2 0 0 1 2-2h5v16H6a2 2 0 0 1-2-2z"/><path d="M20 6a2 2 0 0 0-2-2h-5v16h5a2 2 0 0 0 2-2z"/></svg>
+          <span class="stat-num" data-target="850" data-suffix="+">0</span>
+          <p>Learners through Youth Tech Academy</p>
+        </div>
+        <div class="impact__card reveal">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+          <span class="stat-num" data-target="85" data-suffix="%">0</span>
+          <p>Academy graduates employed, training or building a year on</p>
+        </div>
+        <div class="impact__card reveal">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="10" r="3"/><path d="M12 21s7-6.5 7-11a7 7 0 1 0-14 0c0 4.5 7 11 7 11z"/></svg>
+          <span class="stat-num" data-target="1500" data-suffix="+">0</span>
+          <p>Young people reached through Rural Tech Connect</p>
+        </div>
+        <div class="impact__card reveal">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="1.6" aria-hidden="true"><path d="M17 20v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1"/><circle cx="9" cy="7" r="3.2"/><path d="M23 20v-1a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span class="stat-num" data-target="88" data-suffix="%">0</span>
+          <p>Team completion rate, Code Impact Challenge</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="voice" id="voice" data-thread="gold">
+    <div class="container voice__row">
+      <div class="voice__media reveal">
+        <div class="story__pattern" aria-hidden="true"></div>
+        <div class="voice__play" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <span class="voice__caption">Code Impact Challenge — cohort presentation</span>
+        <span class="voice__duration">1:48</span>
+      </div>
+      <div class="reveal">
+        <p class="eyebrow">In their words</p>
+        <blockquote>&ldquo;The challenge forced us to think clearly, move faster, and explain our decisions in a way we never had before.&rdquo;</blockquote>
+        <cite>— Saah J., Code Impact Challenge participant</cite>
+      </div>
+    </div>
+  </section>
+
+  <section class="thesis reveal" id="thesis" data-thread="navy">
+    <div class="container">
+      <p class="eyebrow">How we work</p>
+      <p>We do not treat access, training, entrepreneurship and advocacy as separate silos. <strong>The strongest outcomes happen when these pieces reinforce each other.</strong></p>
+    </div>
+  </section>
+
+  <section class="team" id="team" data-thread="gold">
+    <div class="container">
+      <p class="eyebrow reveal">Who we are</p>
+      <h2 class="reveal">The people behind the programmes.</h2>
+      <div class="team__grid">
+        <div class="team__card reveal">
+          <div class="team__photo" style="--ring:var(--navy)">EO</div>
+          <p class="team__name">Efua Owusu</p>
+          <p class="team__role">Executive Director</p>
+          <span class="team__tag">Leadership</span>
+        </div>
+        <div class="team__card reveal">
+          <div class="team__photo" style="--ring:var(--gold)">KB</div>
+          <p class="team__name">Kwame Boateng</p>
+          <p class="team__role">Head of Programmes</p>
+          <span class="team__tag">Youth Tech Academy</span>
+        </div>
+        <div class="team__card reveal">
+          <div class="team__photo" style="--ring:var(--teal)">NA</div>
+          <p class="team__name">Naa Adjei</p>
+          <p class="team__role">Partnerships &amp; Development</p>
+          <span class="team__tag">GIZ &amp; USAID liaison</span>
+        </div>
+        <div class="team__card reveal">
+          <div class="team__photo" style="--ring:var(--navy)">AS</div>
+          <p class="team__name">Abena Sarpong</p>
+          <p class="team__role">Girls in Tech Lead</p>
+          <span class="team__tag">Girls in Tech</span>
+        </div>
+      </div>
+      <a href="#" class="story__link">Meet the full team →</a>
+    </div>
+  </section>
+
+  <section class="involved" id="involved" data-thread="gold">
+    <div class="container">
+      <p class="eyebrow">Get involved</p>
+      <h2 class="reveal">There's a place for you in this, too.</h2>
+      <div class="involved__grid">
+        <div class="involved__card reveal">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7A4A0F" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-8-4.9-8-11.5A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 8 3.5C20 16.1 12 21 12 21z"/></svg>
+          <h3>Donate</h3>
+          <p>Support goes toward a cohort seat, training materials, or mentor time — not overhead.</p>
+          <a href="#" class="btn btn--ghost-light">Give today</a>
+        </div>
+        <div class="involved__card reveal">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0B4A3D" stroke-width="1.6" aria-hidden="true"><path d="M17 20v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1"/><circle cx="9" cy="7" r="3.2"/></svg>
+          <h3>Apply for training</h3>
+          <p>See which track — Academy, Girls in Tech, or the Entrepreneurship Hub — fits where you are right now.</p>
+          <a href="#" class="btn btn--ghost-light">Apply for training</a>
+        </div>
+        <div class="involved__card reveal">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#081D3D" stroke-width="1.6" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M10 21v-6h4v6"/></svg>
+          <h3>Partner with us</h3>
+          <p>Schools, employers, NGOs and international development partners all have a route in — GIZ and USAID already do.</p>
+          <a href="#" class="btn btn--ghost-light">Partner with us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer data-thread="navy">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand">
+          <span class="footer__badge" aria-hidden="true">ITFY</span>
+          <strong>IT For Youth Ghana</strong>
+        </div>
+        <p>Empowering Ghanaian youth with digital skills and the confidence to shape tomorrow's economy.</p>
+        <form class="footer__form" onsubmit="return false;">
+          <input type="email" placeholder="Your email" aria-label="Email address" />
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#program-academy">What we do</a></li>
+          <li><a href="#impact">Our impact</a></li>
+          <li><a href="#voice">Voices</a></li>
+          <li><a href="#thesis">Who we are</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Get involved</h4>
+        <ul>
+          <li><a href="#involved">Donate</a></li>
+          <li><a href="#involved">Apply for training</a></li>
+          <li><a href="#involved">Partner with us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="#">info@itforyouthghana.org</a></li>
+          <li><a href="#">Accra, Ghana</a></li>
+          <li class="footer__social" style="display:flex;">
+            <a href="#" aria-label="Instagram">Instagram</a>
+            <a href="#" aria-label="Facebook">Facebook</a>
+            <a href="#" aria-label="X">X</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 IT For Youth Ghana</span>
+      <span>Concept design — not a live site</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var navEl = document.getElementById('nav');
+  var heroEl = document.getElementById('hero');
+  if (navEl && heroEl) {
+    var navObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        navEl.classList.toggle('nav--solid', !entry.isIntersecting);
+      });
+    }, { threshold: 0, rootMargin: '-88px 0px 0px 0px' });
+    navObserver.observe(heroEl);
+  }
+
+  var threadEl = document.getElementById('thread');
+  var threadColors = { navy: 'var(--navy)', gold: 'var(--gold)', teal: 'var(--teal)' };
+  var threadSections = document.querySelectorAll('[data-thread]');
+  if (threadEl && threadSections.length) {
+    var threadObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          var key = entry.target.getAttribute('data-thread');
+          threadEl.style.background = threadColors[key] || threadColors.navy;
+        }
+      });
+    }, { threshold: 0, rootMargin: '-45% 0px -45% 0px' });
+    threadSections.forEach(function(s){ threadObserver.observe(s); });
+  }
+
+  var revealEls = document.querySelectorAll('.reveal');
+  if (reduceMotion) {
+    revealEls.forEach(function(el){ el.classList.add('is-visible'); });
+  } else if (revealEls.length) {
+    var revealObserver = new IntersectionObserver(function(entries, obs){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(function(el){ revealObserver.observe(el); });
+  }
+
+  function animateCount(el){
+    var target = parseFloat(el.getAttribute('data-target'));
+    var suffix = el.getAttribute('data-suffix') || '';
+    if (reduceMotion) {
+      el.textContent = target.toLocaleString() + suffix;
+      return;
+    }
+    var duration = 1400;
+    var start = null;
+    function tick(ts){
+      if (start === null) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var value = Math.round(target * eased);
+      el.textContent = value.toLocaleString() + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  var statEls = document.querySelectorAll('.stat-num');
+  if (statEls.length) {
+    var statObserver = new IntersectionObserver(function(entries, obs){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          animateCount(entry.target);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.6 });
+    statEls.forEach(function(el){ statObserver.observe(el); });
+  }
+})();
+</script>
+
+</body>
+</html>

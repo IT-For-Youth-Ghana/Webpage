@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="IT For Youth Ghana — For Organisations editorial concept" />
+  <title>For Organisations — IT For Youth Ghana</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --paper:#fff;
+      --warm:#fbf8f2;
+      --mist:#eef2f8;
+      --ink:#11233f;
+      --ink-soft:#5b6677;
+      --navy:#0c2d5a;
+      --navy-deep:#081d3d;
+      --gold:#f5a623;
+      --gold-soft:#fff1d6;
+      --teal:#157f6b;
+      --teal-deep:#0b4a3d;
+      --border:#dde4ee;
+      --max:1240px;
+      --shadow:0 26px 80px rgba(8,29,61,.12);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:"DM Sans",system-ui,sans-serif;
+      color:var(--ink);
+      background:var(--paper);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+      overflow-x:hidden
+    }
+
+    img{display:block;width:100%;height:100%;object-fit:cover}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3,.display{
+      font-family:"Playfair Display",Georgia,serif;
+      line-height:1.02;
+      letter-spacing:-.03em
+    }
+
+    .shell{width:min(var(--max),calc(100% - 48px));margin-inline:auto}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:10px;
+      margin-bottom:18px;font-size:.76rem;font-weight:700;
+      letter-spacing:.15em;text-transform:uppercase;color:var(--teal)
+    }
+    .eyebrow::before{content:"";width:22px;height:2px;background:currentColor}
+
+    .button{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:52px;padding:0 26px;border-radius:999px;
+      border:1px solid transparent;font-size:.94rem;font-weight:700;
+      transition:transform .18s ease,background .18s ease
+    }
+    .button:hover{transform:translateY(-2px)}
+    .button--gold{background:var(--gold);color:var(--navy-deep)}
+    .button--navy{background:var(--navy);color:#fff}
+    .button--light{background:#fff;color:var(--navy);border-color:rgba(12,45,90,.18)}
+    .button--ghost{color:#fff;border-color:rgba(255,255,255,.34)}
+    a:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
+    .text-link{display:inline-flex;margin-top:24px;font-weight:700;color:var(--gold)}
+    .text-link.dark{color:var(--navy)}
+
+    .site-header{
+      position:sticky;top:0;z-index:50;
+      background:rgba(255,255,255,.94);backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(17,35,63,.08)
+    }
+    .nav{
+      min-height:78px;display:grid;grid-template-columns:auto 1fr auto;
+      align-items:center;gap:28px
+    }
+    .brand{display:inline-flex;flex-direction:column;line-height:1}
+    .brand strong{font-size:1.65rem;letter-spacing:-.04em;color:var(--navy)}
+    .brand small{margin-top:5px;font-size:.58rem;font-weight:700;letter-spacing:.22em;color:var(--ink-soft)}
+    .nav-links{display:flex;justify-content:center;gap:clamp(18px,3vw,38px);font-size:.91rem;font-weight:600;color:#293951}
+    .nav-links a{position:relative;padding:8px 0}
+    .nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:2px;height:2px;background:var(--gold);transition:right .18s ease}
+    .nav-links a:hover::after,.nav-links a[aria-current="page"]::after{right:0}
+
+    /* Hero */
+    .hero{
+      padding:28px 0 92px;
+      background:var(--warm)
+    }
+    .hero-stage{
+      display:grid;
+      grid-template-columns:.92fr 1.08fr;
+      min-height:700px;
+      border-radius:44px;
+      overflow:hidden;
+      background:var(--navy-deep);
+      color:#fff;
+      box-shadow:var(--shadow)
+    }
+    .hero-copy{
+      padding:clamp(48px,6vw,88px);
+      display:flex;flex-direction:column;justify-content:center;
+      background:
+        radial-gradient(circle at 20% 15%,rgba(245,166,35,.17),transparent 28%),
+        linear-gradient(145deg,var(--navy-deep),var(--navy))
+    }
+    .hero-copy .eyebrow{color:var(--gold)}
+    .hero h1{font-size:clamp(4rem,6.6vw,7rem)}
+    .hero h1 em{font-style:italic;color:var(--gold)}
+    .hero-copy p{max-width:55ch;margin-top:28px;color:rgba(255,255,255,.76);font-size:1.06rem}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+    .hero-media{position:relative;min-height:700px}
+    .hero-media::after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(90deg,rgba(8,29,61,.26),transparent 30%),
+                 linear-gradient(0deg,rgba(8,29,61,.18),transparent 44%)
+    }
+    .hero-note{
+      position:absolute;z-index:2;left:28px;right:28px;bottom:28px;
+      padding:24px 30px;border-radius:999px;
+      background:rgba(255,255,255,.94);color:var(--navy-deep);
+      font-family:"Playfair Display",Georgia,serif;font-size:1.05rem;line-height:1.35
+    }
+
+    /* Intro */
+    .intro{
+      padding:118px 0;background:#fff
+    }
+    .intro-grid{
+      display:grid;grid-template-columns:.72fr 1.28fr;
+      gap:clamp(48px,8vw,110px);align-items:start
+    }
+    .intro-copy h2{font-size:clamp(3.1rem,5vw,5.8rem);color:var(--navy-deep)}
+    .intro-copy p{max-width:66ch;margin-top:28px;color:var(--ink-soft);font-size:1.04rem}
+    .intro-proof{
+      margin-top:40px;
+      display:grid;grid-template-columns:repeat(3,1fr);
+      border-top:1px solid var(--border)
+    }
+    .intro-proof div{
+      padding:28px 22px 0 0;
+      border-right:1px solid var(--border)
+    }
+    .intro-proof div+div{padding-left:22px}
+    .intro-proof div:last-child{border-right:0}
+    .intro-proof strong{
+      display:block;font-family:"Playfair Display",Georgia,serif;
+      font-size:2.4rem;color:var(--navy)
+    }
+    .intro-proof span{display:block;margin-top:5px;font-size:.82rem;color:var(--ink-soft)}
+
+    /* Service landscape */
+    .services{
+      padding:118px 0;
+      background:var(--mist)
+    }
+    .services-head{
+      display:grid;grid-template-columns:.92fr 1.08fr;
+      gap:50px;align-items:end;margin-bottom:54px
+    }
+    .services-head h2{font-size:clamp(3.1rem,5vw,5.7rem);color:var(--navy-deep)}
+    .services-head p{max-width:56ch;justify-self:end;color:var(--ink-soft)}
+
+    .service-feature{
+      display:grid;grid-template-columns:1.18fr .82fr;
+      min-height:610px;border-radius:42px;overflow:hidden;
+      background:var(--navy);color:#fff
+    }
+    .service-media{min-height:610px}
+    .service-copy{
+      padding:clamp(46px,5vw,70px);
+      display:flex;flex-direction:column;justify-content:center
+    }
+    .service-copy .eyebrow{color:var(--gold)}
+    .service-copy h3{font-size:clamp(2.9rem,4.6vw,5rem)}
+    .service-copy p{margin-top:22px;color:rgba(255,255,255,.7)}
+
+    .service-pair{
+      display:grid;grid-template-columns:1fr 1fr;
+      gap:24px;margin-top:24px
+    }
+    .service-card{
+      min-height:520px;border-radius:36px;overflow:hidden;position:relative
+    }
+    .service-card::after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(0deg,rgba(8,29,61,.86),transparent 64%)
+    }
+    .service-card-copy{
+      position:absolute;z-index:2;left:28px;right:28px;bottom:28px;color:#fff
+    }
+    .service-card-copy .eyebrow{color:var(--gold)}
+    .service-card-copy h3{font-size:clamp(2.2rem,3.6vw,3.8rem)}
+    .service-card-copy p{margin-top:14px;color:rgba(255,255,255,.7)}
+
+    /* Engagement model */
+    .engagement{
+      padding:118px 0;background:#fff
+    }
+    .engagement-stage{
+      display:grid;grid-template-columns:.82fr 1.18fr;
+      gap:34px;align-items:center
+    }
+    .engagement-media{
+      min-height:660px;border-radius:999px 999px 42px 42px;overflow:hidden
+    }
+    .engagement-copy h2{font-size:clamp(3rem,5vw,5.6rem);color:var(--navy-deep)}
+    .engagement-copy p{max-width:58ch;margin-top:26px;color:var(--ink-soft)}
+    .engagement-list{margin-top:38px;border-top:1px solid var(--border)}
+    .engagement-item{
+      display:grid;grid-template-columns:auto 1fr;
+      gap:18px;padding:24px 0;border-bottom:1px solid var(--border)
+    }
+    .engagement-item span{
+      width:38px;height:38px;border-radius:50%;
+      display:grid;place-items:center;background:var(--gold-soft);
+      color:var(--navy);font-weight:700;font-size:.78rem
+    }
+    .engagement-item strong{
+      display:block;font-family:"Playfair Display",Georgia,serif;
+      font-size:1.55rem;color:var(--navy)
+    }
+    .engagement-item p{margin-top:6px}
+
+    /* Evidence */
+    .evidence{
+      padding:118px 0;
+      background:var(--navy-deep);
+      color:#fff
+    }
+    .evidence-grid{
+      display:grid;grid-template-columns:.78fr 1.22fr;
+      gap:52px;align-items:center
+    }
+    .evidence-copy .eyebrow{color:var(--gold)}
+    .evidence-copy h2{font-size:clamp(3rem,5vw,5.8rem)}
+    .evidence-copy p{max-width:55ch;margin-top:24px;color:rgba(255,255,255,.68)}
+    .evidence-visual{
+      min-height:600px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px
+    }
+    .evidence-stat{
+      border-radius:34px;
+      padding:34px;
+      display:flex;flex-direction:column;justify-content:space-between
+    }
+    .evidence-stat--gold{background:var(--gold);color:var(--navy-deep)}
+    .evidence-stat--white{background:#fff;color:var(--navy-deep)}
+    .evidence-stat--teal{background:var(--teal);color:#fff}
+    .evidence-stat--image{
+      padding:0;overflow:hidden;position:relative
+    }
+    .evidence-stat strong{
+      font-family:"Playfair Display",Georgia,serif;
+      font-size:clamp(3.8rem,6vw,6rem);line-height:.9
+    }
+    .evidence-stat p{font-size:.88rem;max-width:24ch}
+    .evidence-stat--image::after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(0deg,rgba(8,29,61,.65),transparent 56%)
+    }
+    .evidence-stat--image span{
+      position:absolute;z-index:2;left:22px;right:22px;bottom:20px;
+      font-family:"Playfair Display",Georgia,serif;font-size:1.25rem
+    }
+
+    /* Hire graduates */
+    .graduates{
+      padding:118px 0;
+      background:var(--warm)
+    }
+    .graduates-stage{
+      display:grid;grid-template-columns:1.05fr .95fr;
+      min-height:620px;border-radius:42px;overflow:hidden;
+      background:var(--gold-soft)
+    }
+    .graduates-copy{
+      padding:clamp(48px,6vw,82px);
+      display:flex;flex-direction:column;justify-content:center
+    }
+    .graduates-copy h2{font-size:clamp(3rem,5vw,5.6rem);color:var(--navy-deep)}
+    .graduates-copy p{margin-top:24px;max-width:56ch;color:var(--ink-soft)}
+    .graduate-pill{
+      margin-top:34px;
+      padding:24px 28px;border-radius:999px;
+      background:#fff;border:1px solid rgba(12,45,90,.1);
+      font-family:"Playfair Display",Georgia,serif;font-size:1.12rem;color:var(--navy)
+    }
+    .graduates-media{min-height:620px}
+
+    /* Volunteering */
+    .volunteer{
+      padding:118px 0;
+      background:#fff
+    }
+    .volunteer-stage{
+      display:grid;grid-template-columns:.9fr 1.1fr;
+      gap:32px;align-items:stretch
+    }
+    .volunteer-media{
+      min-height:620px;border-radius:42px;overflow:hidden
+    }
+    .volunteer-copy{
+      padding:clamp(44px,5vw,68px);
+      border-radius:42px;background:var(--teal-deep);color:#fff;
+      display:flex;flex-direction:column;justify-content:center
+    }
+    .volunteer-copy .eyebrow{color:var(--gold)}
+    .volunteer-copy h2{font-size:clamp(3rem,4.8vw,5.3rem)}
+    .volunteer-copy p{margin-top:24px;color:rgba(255,255,255,.7)}
+    .volunteer-note{
+      margin-top:34px;padding:26px 28px;border-radius:28px;
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)
+    }
+    .volunteer-note strong{
+      font-family:"Playfair Display",Georgia,serif;
+      font-size:1.4rem;color:var(--gold)
+    }
+    .volunteer-note p{margin-top:8px}
+
+    /* Partnership story */
+    .story{
+      padding:118px 0;
+      background:var(--mist)
+    }
+    .story-stage{
+      display:grid;grid-template-columns:.8fr 1.2fr;
+      min-height:610px;border-radius:999px 42px 42px 999px;
+      overflow:hidden;background:var(--navy-deep);color:#fff
+    }
+    .story-media{
+      margin:24px 0 24px 24px;
+      border-radius:999px;overflow:hidden;min-height:562px
+    }
+    .story-copy{
+      padding:clamp(46px,6vw,82px);
+      display:flex;flex-direction:column;justify-content:center
+    }
+    .story-copy .eyebrow{color:var(--gold)}
+    .story-copy h2{font-size:clamp(3rem,5vw,5.5rem)}
+    .story-copy p{margin-top:24px;color:rgba(255,255,255,.72);max-width:56ch}
+    .story-quote{
+      margin-top:28px;padding-left:24px;border-left:3px solid var(--gold);
+      font-family:"Playfair Display",Georgia,serif;font-style:italic;
+      font-size:clamp(1.35rem,2vw,1.8rem);line-height:1.45;
+      color:rgba(255,255,255,.85)
+    }
+
+    /* CTA */
+    .closing{
+      padding:118px 0;background:#fff
+    }
+    .closing-stage{
+      position:relative;overflow:hidden;border-radius:42px;
+      padding:clamp(56px,7vw,98px);
+      background:
+        radial-gradient(circle at 86% 24%,rgba(245,166,35,.24),transparent 23%),
+        var(--navy);
+      color:#fff
+    }
+    .closing-stage h2{max-width:930px;font-size:clamp(3.3rem,5.6vw,6.1rem)}
+    .closing-stage p{max-width:58ch;margin-top:24px;color:rgba(255,255,255,.7)}
+    .closing-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+    .closing-badge{
+      position:absolute;right:54px;bottom:54px;
+      width:180px;height:180px;border-radius:50%;
+      display:grid;place-items:center;text-align:center;padding:24px;
+      background:var(--gold);color:var(--navy-deep);
+      font-family:"Playfair Display",Georgia,serif;font-size:1.2rem;line-height:1.25
+    }
+
+    footer{
+      padding:72px 0 34px;background:var(--navy-deep);color:rgba(255,255,255,.68)
+    }
+    .footer-main{
+      display:grid;grid-template-columns:1.2fr .8fr .8fr;
+      gap:44px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.12)
+    }
+    footer .brand strong{color:#fff}
+    .footer-copy{max-width:42ch;margin-top:18px;color:rgba(255,255,255,.58)}
+    .footer-group strong{display:block;margin-bottom:16px;color:#fff}
+    .footer-group a{display:block;margin:8px 0;font-size:.9rem}
+    .footer-bottom{display:flex;justify-content:space-between;gap:18px;padding-top:26px;font-size:.78rem}
+
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.is-visible{opacity:1;transform:none}
+
+    @media(max-width:1040px){
+      .hero-stage,.intro-grid,.service-feature,.engagement-stage,.evidence-grid,
+      .graduates-stage,.volunteer-stage,.story-stage{
+        grid-template-columns:1fr
+      }
+      .hero-media{min-height:520px}
+      .services-head{grid-template-columns:1fr}
+      .services-head p{justify-self:start}
+      .service-media{min-height:500px}
+      .service-copy{min-height:430px}
+      .engagement-media{min-height:520px}
+      .evidence-visual{min-height:520px}
+      .graduates-media{min-height:500px}
+      .volunteer-media{min-height:500px}
+      .story-stage{border-radius:42px}
+      .story-media{margin:24px 24px 0;border-radius:999px 999px 42px 42px;min-height:500px}
+    }
+
+    @media(max-width:820px){
+      .nav{grid-template-columns:1fr auto}
+      .nav-links{display:none}
+      .intro-proof{grid-template-columns:1fr}
+      .intro-proof div,.intro-proof div+div{
+        border-right:0;border-bottom:1px solid var(--border);padding:22px 0
+      }
+      .intro-proof div:last-child{border-bottom:0}
+      .service-pair{grid-template-columns:1fr}
+      .evidence-visual{grid-template-columns:1fr}
+      .footer-main{grid-template-columns:1fr}
+      .footer-bottom{flex-direction:column}
+      .closing-badge{display:none}
+    }
+
+    @media(max-width:680px){
+      .shell{width:min(calc(100% - 28px),var(--max))}
+      .nav{min-height:68px;gap:14px}
+      .brand strong{font-size:1.35rem}
+      .site-header .button{min-height:44px;padding:0 18px;font-size:.82rem}
+
+      .hero{padding-top:14px;padding-bottom:80px}
+      .hero-stage{border-radius:28px}
+      .hero-copy{padding:44px 26px}
+      .hero h1{font-size:clamp(3.2rem,15vw,4.8rem)}
+      .hero-media{min-height:450px}
+      .hero-note{left:18px;right:18px;bottom:18px;border-radius:24px;padding:20px 22px}
+
+      .intro,.services,.engagement,.evidence,.graduates,.volunteer,.story,.closing{
+        padding-top:84px;padding-bottom:84px
+      }
+
+      .service-feature,.service-card,.graduates-stage,.volunteer-media,.volunteer-copy,.closing-stage{
+        border-radius:28px
+      }
+      .service-media{min-height:460px}
+      .service-copy{padding:42px 26px}
+      .service-card{min-height:470px}
+      .service-card-copy{left:22px;right:22px;bottom:22px}
+
+      .engagement-media{min-height:470px;border-radius:999px 999px 28px 28px}
+      .engagement-item{grid-template-columns:1fr}
+
+      .evidence-visual{min-height:auto}
+      .evidence-stat{min-height:280px;border-radius:28px;padding:28px}
+      .evidence-stat--image{min-height:360px}
+
+      .graduates-copy{padding:44px 26px}
+      .graduate-pill{border-radius:24px}
+      .graduates-media{min-height:460px}
+
+      .volunteer-media{min-height:460px}
+      .volunteer-copy{padding:42px 26px}
+      .volunteer-note{border-radius:22px;padding:24px}
+
+      .story-media{min-height:430px;margin:16px 16px 0}
+      .story-copy{padding:38px 26px 48px}
+      .closing-stage{padding:48px 26px}
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      .reveal{opacity:1;transform:none;transition:none}
+      .button{transition:none}
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="shell nav">
+      <a class="brand" href="#" aria-label="IT For Youth Ghana homepage">
+        <strong>ITFYG</strong>
+        <small>IT FOR YOUTH GHANA</small>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#">Who we are</a>
+        <a href="#">What we do</a>
+        <a href="#" aria-current="page">For organisations</a>
+        <a href="#">Our impact</a>
+        <a href="#">Stories</a>
+      </nav>
+
+      <a class="button button--gold" href="#contact">Work with us</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell hero-stage">
+        <div class="hero-copy">
+          <span class="eyebrow">For organisations</span>
+          <h1>Turn partnership into <em>practical opportunity.</em></h1>
+          <p>
+            ITFYG works with companies, schools, NGOs, funders and institutions to design training, expand access, connect employers with emerging talent and create meaningful ways for staff and partners to contribute.
+          </p>
+
+          <div class="hero-actions">
+            <a class="button button--gold" href="#services">Explore ways to work together</a>
+            <a class="button button--ghost" href="#evidence">See the value</a>
+          </div>
+        </div>
+
+        <div class="hero-media">
+          <img
+            src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1600&q=85"
+            alt="A professional team collaborating during a planning meeting"
+          />
+          <div class="hero-note">
+            Institutional work should feel credible and mature without losing the human story at the centre of the mission.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="intro reveal">
+      <div class="shell intro-grid">
+        <div>
+          <span class="eyebrow">Why organisations work with ITFYG</span>
+        </div>
+
+        <div class="intro-copy">
+          <h2>Because good partnership should create something neither side could do alone.</h2>
+          <p>
+            Organisations can bring resources, expertise, reach, employment pathways and institutional capacity. ITFYG brings youth-centred programme experience, practical delivery, community context and a growing ecosystem around digital skills and opportunity.
+          </p>
+
+          <div class="intro-proof" aria-label="Illustrative partnership strengths">
+            <div>
+              <strong>Training</strong>
+              <span>practical programmes built around real learning needs</span>
+            </div>
+            <div>
+              <strong>Talent</strong>
+              <span>stronger routes between emerging skills and employers</span>
+            </div>
+            <div>
+              <strong>Impact</strong>
+              <span>partnerships tied to visible participation and outcomes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="services" id="services">
+      <div class="shell">
+        <div class="services-head reveal">
+          <div>
+            <span class="eyebrow">Ways to work together</span>
+            <h2>Different organisations need different forms of partnership.</h2>
+          </div>
+          <p>
+            Instead of presenting four identical service cards, this page gives each route the visual weight that matches the relationship it represents.
+          </p>
+        </div>
+
+        <article class="service-feature reveal">
+          <div class="service-media">
+            <img
+              src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1600&q=85"
+              alt="A facilitator delivering a training session to a group"
+            />
+          </div>
+
+          <div class="service-copy">
+            <span class="eyebrow">Corporate training</span>
+            <h3>Practical learning shaped around the people in your organisation.</h3>
+            <p>
+              Work with ITFYG to deliver digital-skills, professional-development or technology learning experiences designed around organisational needs rather than generic training packages.
+            </p>
+            <a class="text-link" href="#">Explore corporate training</a>
+          </div>
+        </article>
+
+        <div class="service-pair">
+          <article class="service-card reveal">
+            <img
+              src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1300&q=85"
+              alt="A professional team discussing work together"
+            />
+            <div class="service-card-copy">
+              <span class="eyebrow">Hire graduates</span>
+              <h3>Meet emerging talent with practical experience behind it.</h3>
+              <p>Connect recruitment and opportunity with learners who have built, practised and demonstrated their skills.</p>
+              <a class="text-link" href="#">Explore graduate hiring</a>
+            </div>
+          </article>
+
+          <article class="service-card reveal">
+            <img
+              src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1300&q=85"
+              alt="People collaborating around a table in a workshop"
+            />
+            <div class="service-card-copy">
+              <span class="eyebrow">Sponsorships</span>
+              <h3>Back access, training and the systems that make opportunity possible.</h3>
+              <p>Support cohorts, equipment, community access, events, scholarships or other programme priorities.</p>
+              <a class="text-link" href="#">Explore sponsorships</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="engagement">
+      <div class="shell engagement-stage reveal">
+        <div class="engagement-media">
+          <img
+            src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1300&q=85"
+            alt="Colleagues working together during a collaborative planning session"
+          />
+        </div>
+
+        <div class="engagement-copy">
+          <span class="eyebrow">How engagement works</span>
+          <h2>Start with the outcome, then design the partnership around it.</h2>
+          <p>
+            The strongest collaborations are usually clearer than “support our work.” They begin with what an organisation wants to make possible and what ITFYG can realistically deliver with integrity.
+          </p>
+
+          <div class="engagement-list">
+            <div class="engagement-item">
+              <span>01</span>
+              <div>
+                <strong>Define the need</strong>
+                <p>Clarify the audience, context, challenge and intended outcome.</p>
+              </div>
+            </div>
+            <div class="engagement-item">
+              <span>02</span>
+              <div>
+                <strong>Shape the model</strong>
+                <p>Agree the programme, partnership, talent or volunteering route that fits.</p>
+              </div>
+            </div>
+            <div class="engagement-item">
+              <span>03</span>
+              <div>
+                <strong>Deliver together</strong>
+                <p>Coordinate implementation, participation, communication and responsibilities.</p>
+              </div>
+            </div>
+            <div class="engagement-item">
+              <span>04</span>
+              <div>
+                <strong>Learn from the result</strong>
+                <p>Use evidence and feedback to understand what worked and what should happen next.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="evidence" id="evidence">
+      <div class="shell evidence-grid reveal">
+        <div class="evidence-copy">
+          <span class="eyebrow">What organisations need to know</span>
+          <h2>Partnership should be visible in the work, not only in the announcement.</h2>
+          <p>
+            This section becomes the evidence layer: reach, delivery capacity, participation, learner outcomes, programme stories and other verified numbers from the CMS should eventually replace the illustrative content here.
+          </p>
+          <a class="text-link" href="#">Explore ITFYG impact</a>
+        </div>
+
+        <div class="evidence-visual">
+          <article class="evidence-stat evidence-stat--gold">
+            <strong>22K+</strong>
+            <p>Illustrative placeholder for a major verified reach figure.</p>
+          </article>
+
+          <article class="evidence-stat evidence-stat--image">
+            <img
+              src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1000&q=85"
+              alt="A mentor supporting young people during a practical learning session"
+            />
+            <span>Human stories should sit beside the numbers.</span>
+          </article>
+
+          <article class="evidence-stat evidence-stat--teal">
+            <strong>150+</strong>
+            <p>Illustrative placeholder for schools, communities or delivery locations.</p>
+          </article>
+
+          <article class="evidence-stat evidence-stat--white">
+            <strong>270+</strong>
+            <p>Illustrative placeholder for mentors, volunteers or contributors.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="graduates">
+      <div class="shell graduates-stage reveal">
+        <div class="graduates-copy">
+          <span class="eyebrow">Hire graduates</span>
+          <h2>Talent pipelines should feel closer to the work people actually do.</h2>
+          <p>
+            Employers can connect with learners and graduates whose training has included projects, practical tasks, collaboration and visible evidence of skill. The dedicated hiring page can go deeper into profiles, roles and employer processes.
+          </p>
+
+          <div class="graduate-pill">
+            From training → projects → portfolio → opportunity.
+          </div>
+
+          <a class="button button--navy" href="#" style="margin-top:30px">Explore graduate hiring</a>
+        </div>
+
+        <div class="graduates-media">
+          <img
+            src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1400&q=85"
+            alt="Young professionals collaborating together in a workplace environment"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="volunteer">
+      <div class="shell volunteer-stage">
+        <div class="volunteer-media reveal">
+          <img
+            src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1400&q=85"
+            alt="A mentor guiding learners through a practical exercise"
+          />
+        </div>
+
+        <div class="volunteer-copy reveal">
+          <span class="eyebrow">Staff volunteering</span>
+          <h2>Give expertise somewhere it can become useful.</h2>
+          <p>
+            Staff volunteering can include mentoring, career conversations, practical workshops, portfolio review, technical sessions or other forms of contribution that match programme needs.
+          </p>
+
+          <div class="volunteer-note">
+            <strong>Meaningful beats symbolic.</strong>
+            <p>
+              The strongest volunteering programmes should be designed around what young people actually need, not simply around available corporate activities.
+            </p>
+          </div>
+
+          <a class="text-link" href="#">Explore staff volunteering</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="story">
+      <div class="shell story-stage reveal">
+        <div class="story-media">
+          <img
+            src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1200&q=85"
+            alt="A professional team in discussion during a collaborative meeting"
+          />
+        </div>
+
+        <div class="story-copy">
+          <span class="eyebrow">Partnership story</span>
+          <h2>The best partnership stories are about what became possible.</h2>
+          <p>
+            This space should eventually feature one verified collaboration in depth—what the partner wanted to achieve, how the work was designed, what ITFYG delivered and what changed for participants.
+          </p>
+          <div class="story-quote">
+            “A partnership should leave behind more than a logo placement. It should leave behind stronger capability, access or opportunity.”
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" id="contact">
+      <div class="shell closing-stage reveal">
+        <span class="eyebrow" style="color:var(--gold)">Start a conversation</span>
+        <h2>Tell us what your organisation wants to make possible.</h2>
+        <p>
+          Whether the need is training, sponsorship, graduate talent, volunteering or a more tailored collaboration, the next step begins with understanding the outcome together.
+        </p>
+
+        <div class="closing-actions">
+          <a class="button button--gold" href="#">Work with ITFYG</a>
+          <a class="button button--light" href="#">Explore partnership options</a>
+        </div>
+
+        <div class="closing-badge">Build something useful together.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-main">
+        <div>
+          <a class="brand" href="#">
+            <strong>ITFYG</strong>
+            <small>IT FOR YOUTH GHANA</small>
+          </a>
+          <p class="footer-copy">
+            Building practical digital skills, confidence and opportunity with young people across Ghana.
+          </p>
+        </div>
+
+        <div class="footer-group">
+          <strong>For organisations</strong>
+          <a href="#">Corporate training</a>
+          <a href="#">Sponsorships</a>
+          <a href="#">Hire graduates</a>
+          <a href="#">Staff volunteering</a>
+        </div>
+
+        <div class="footer-group">
+          <strong>Explore</strong>
+          <a href="#">What we do</a>
+          <a href="#">Our impact</a>
+          <a href="#">Partner with us</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 IT For Youth Ghana — For Organisations redesign concept</span>
+        <span>Photography in this prototype is temporary Unsplash placeholder media.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const elements = document.querySelectorAll(".reveal");
+
+      if (reduced || !("IntersectionObserver" in window)) {
+        elements.forEach(el => el.classList.add("is-visible"));
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          obs.unobserve(entry.target);
+        });
+      }, { threshold: 0.12 });
+
+      elements.forEach(el => observer.observe(el));
+    })();
+  </script>
+</body>
+</html>

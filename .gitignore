@@ -6,12 +6,15 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+.env
 
 node_modules
 .DS_Store
 dist
 dist-ssr
 coverage
+.next
+.vercel
 *.local
 
 /cypress/videos/
@@ -28,4 +31,13 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+.superdesign/tmp/
 # Force deploy
+.codex
+.azure
+credentials/
+
+# Playwright output
+/test-results/
+/playwright-report/
+/blob-report/

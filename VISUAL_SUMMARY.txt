@@ -1,0 +1,186 @@
+mkdir -p /home/claude/copilot-setup/.github/instructions
+mkdir -p /home/claude/copilot-setup/copilot-issues
+
+# ---------------------------------------------------------------------------
+# .github/copilot-instructions.md — repo-wide, always-on
+# ---------------------------------------------------------------------------
+cat > /home/claude/copilot-setup/.github/copilot-instructions.md << 'EOF'
+# IT For Youth Ghana — repository guide for Copilot cloud agent
+
+## What this project is
+Next.js 14 App Router site (TypeScript, Tailwind) for an NGO, with a Firebase-backed
+CMS layer being retrofitted domain-by-domain onto content that currently lives as
+static exports in `lib/content/*`. The full rollout plan is in
+`docs/CMS_COMPLETION_PLAN.md` — read it before starting any CMS-related issue. It
+explains which domains are already done and why the pattern below looks the way it does.
+
+## The one pattern to copy — do not invent a new one
+Five domains are fully wired end-to-end already: `articles`, `partners`, `testimonials`,
+`team`, `jobs`. Before writing anything, open `lib/cms/articles.ts` and
+`components/admin/article-form.tsx` and copy their shape. Every new CMS domain gets:
+
+```
+lib/cms/<domain>.ts
+  normalize<Domain>(id, data)   // tolerant Firestore-doc -> typed object
+  get<Domain>(s)(options?)      // Firestore read; falls back to the existing
+                                 // lib/content/* static export on empty/missing/error
+  get<Domain>ById(id)
+  save<Domain>(payload, id?)    // upsert via getAdminFirestore(); returns
+                                 // { configured, written, id }
+  delete<Domain>(id)
+
+lib/utils/validators.ts         // add a zod schema for the domain's payload
+app/api/admin/<domain>/route.ts         // POST, guarded by requireAdminApiSession()
+app/api/admin/<domain>/[id]/route.ts    // PUT + DELETE, same guard
+components/admin/<domain>-form.tsx      // client form mirroring article-form.tsx
+app/(admin)/admin/<domain>/page.tsx
+app/(admin)/admin/<domain>/new/page.tsx
+app/(admin)/admin/<domain>/[id]/page.tsx
+lib/utils/revalidate.ts         // confirm/add the path mapping, call it after save+delete
+```
+
+Never write directly to Firestore from a page or from client code. All writes go
+through `lib/firebase/admin.ts` (`getAdminFirestore()`), server-side only, behind
+`requireAdminApiSession()` from `lib/cms/admin-auth.ts`. The client Firebase SDK
+(`lib/firebase/client.ts`) is for Auth only — never add client-side Firestore calls.
+
+## Non-negotiables
+- If `getAdminFirestore()` returns null (Firebase Admin not configured), every read
+  path must fall back to the existing static content from `lib/content/*` and every
+  write path must return `{ success: false, message: "Firebase Admin is not
+  configured yet, so ... cannot be saved." }` with a 503 — copy the exact pattern
+  from `app/api/admin/articles/route.ts`.
+- Public pages/components under `app/(public)/**` must never `import` a static
+  content object from `lib/content/*` directly. They call the matching
+  `lib/cms/*.ts` getter instead. The static import only exists inside that file,
+  as the fallback value.
+- This is a data-source migration, not a redesign. Do not change JSX structure,
+  Tailwind classes, copy, or visual output on public pages — only where the data
+  comes from.
+- Every new admin API route needs `const unauthorized = await requireAdminApiSession();
+  if (unauthorized) return unauthorized;` as its first lines.
+- After a successful save or delete, call `revalidatePath` for every path returned
+  by `getRevalidationPaths(...)` in `lib/utils/revalidate.ts`. If the content type
+  isn't in `revalidationMap` yet, add it.
+- Deeply nested content (arrays of objects — gallery images, FAQs, testimonials,
+  howItWorks steps, focus cards, etc.) gets a single JSON-textarea field in the
+  admin form, validated with zod on submit, not a bespoke repeater UI. This mirrors
+  the existing `contentHtml` textarea bridge in `components/admin/article-form.tsx`.
+  Don't build full add/remove/reorder list editors unless the issue explicitly
+  asks for one.
+
+## Verification before opening a PR
+Check `package.json` for the actual scripts (they aren't documented here). At
+minimum run the project's build command and confirm it exits clean. There's no
+visible test suite in this repo as of this writing — if you add one for a specific
+domain, say so in the PR description; don't assume one exists elsewhere.
+
+## Out of scope unless an issue says otherwise
+- `lib/api/courses.ts` / the external course-catalog API integration
+- Firebase Auth / admin-login flow (`lib/firebase/auth.ts`, `admin-login-form.tsx`)
+- Anything under `app/api/contact`, `app/api/newsletter`, `app/api/apply` (working
+  form-submission endpoints, not CMS-read domains)
+- Visual/design changes of any kind
+EOF
+
+# ---------------------------------------------------------------------------
+# .github/instructions/cms-domains.instructions.md
+# ---------------------------------------------------------------------------
+cat > /home/claude/copilot-setup/.github/instructions/cms-domains.instructions.md << 'EOF'
+---
+applyTo: "lib/cms/**,app/api/admin/**,lib/utils/validators.ts,lib/utils/revalidate.ts"
+description: "CRUD + validator + API route conventions for CMS domains"
+---
+
+- `normalize<Domain>()` must never throw. Missing/malformed Firestore fields get a
+  safe default, not an exception — copy the `typeof data.x === "string" ? data.x : fallback`
+  style used in `lib/cms/articles.ts` and `lib/cms/team.ts`.
+- Every list getter sorts deterministically (see `sortArticles`, `sortPartners`,
+  `sortTestimonials`) so admin tables and public listings don't jitter between renders.
+- `save<Domain>()` always uses `{ merge: true }` on `docRef.set(...)` and stamps
+  `createdAt`/`updatedAt` via `FieldValue.serverTimestamp()` from
+  `firebase-admin/firestore`, imported dynamically inside the function (matches
+  the existing files — don't hoist that import to the top of the module).
+- Strip `undefined` values before writing (see `stripUndefined()` in
+  `lib/cms/articles.ts` and `lib/cms/team.ts`) — Firestore rejects `undefined`.
+- Zod schemas in `lib/utils/validators.ts`: reuse the existing helpers
+  (`optionalTrimmedString`, `checkboxBoolean`, `optionalNumber`, `stringList`)
+  instead of writing new ad hoc preprocessors for the same shapes.
+- API route error shape on validation failure is always:
+  `{ success: false, message: "Please check the highlighted fields and try again.",
+  errors: parsed.error.flatten() }` with status 400 — this is what the admin forms'
+  `getFieldError()` helper expects.
+- `getRevalidationPaths(contentType, slug?)` in `lib/utils/revalidate.ts` is the
+  only thing that should call `revalidatePath` (called from the API route handler,
+  same as `revalidateArticleRoutes()` in `app/api/admin/articles/[id]/route.ts`).
+  Add new content-type keys to `revalidationMap` rather than calling
+  `revalidatePath` inline anywhere else.
+EOF
+
+# ---------------------------------------------------------------------------
+# .github/instructions/admin-ui.instructions.md
+# ---------------------------------------------------------------------------
+cat > /home/claude/copilot-setup/.github/instructions/admin-ui.instructions.md << 'EOF'
+---
+applyTo: "components/admin/**,app/(admin)/admin/**"
+description: "Admin form and page conventions"
+---
+
+- Forms are client components (`"use client"`) with local `useState` for values,
+  field errors, submit state (`idle | success | error`), and an `isSubmitting`/
+  `isDeleting` flag — copy `components/admin/article-form.tsx` or
+  `components/admin/job-form.tsx` structure exactly, don't introduce a form library.
+- Reuse the shared class-name constants pattern (`inputClassName`,
+  `textareaClassName`) defined at the top of each form file rather than repeating
+  Tailwind classes inline.
+- `FieldError` is a small local component per form file (see any existing
+  `*-form.tsx`) — keep that convention rather than centralizing it, unless an
+  issue explicitly asks you to extract a shared one.
+- On successful save: `router.push(<list route>)` then `router.refresh()`. On
+  delete: `window.confirm(...)` before calling the DELETE route.
+- List pages (`app/(admin)/admin/<domain>/page.tsx`) are async server components
+  that fetch via the `lib/cms/*.ts` getter, compute a few `AdminMetric[]` (see
+  `AdminMetricCard`), and render `<AdminDataTable columns={...} rows={...} />`
+  with an `AdminPageHeader` including a `primaryAction` linking to `.../new`.
+- Don't build a new table/metric-card component — `AdminDataTable`,
+  `AdminMetricCard`, `AdminStatusPill`, `AdminPageHeader` already exist in
+  `components/admin/` and cover every domain so far.
+EOF
+
+# ---------------------------------------------------------------------------
+# .github/instructions/public-pages.instructions.md
+# ---------------------------------------------------------------------------
+cat > /home/claude/copilot-setup/.github/instructions/public-pages.instructions.md << 'EOF'
+---
+applyTo: "app/(public)/**"
+description: "Rule for wiring public pages to CMS getters"
+---
+
+- Replace `import { x } from "@/lib/content/..."` with
+  `import { getCmsX } from "@/lib/cms/..."` and `await` it inside the (already
+  async, or now-made-async) server component. The presentational component the
+  page renders (e.g. `components/*/whatever-page.tsx`) keeps the exact same props
+  shape it has today — only the page.tsx caller changes.
+- If the page currently isn't `async`, make it `async` rather than reaching for
+  `use()` or client-side fetching. Server-rendered, same as every other CMS-backed
+  page in this repo (see `app/(public)/who-we-are/team/page.tsx` for the reference
+  shape: `Promise.all([getCmsSitePage(...), getCmsTeamMembers(...)])`).
+- Do not change route segment config (`dynamic`, `revalidate`) unless the issue
+  says to — most of these pages should stay static-with-on-demand-revalidation via
+  `revalidatePath`, matching `generateStaticParams` pages like
+  `app/(public)/for-organisations/[slug]/page.tsx`.
+EOF
+
+echo "--- .github tree ---"
+find /home/claude/copilot-setup/.github -type f
+Output
+
+--- .github tree ---
+/home/claude/copilot-setup/.github/copilot-instructions.md
+/home/claude/copilot-setup/.github/instructions/public-pages.instructions.md
+/home/claude/copilot-setup/.github/instructions/cms-domains.instructions.md
+/home/claude/copilot-setup/.github/instructions/admin-ui.instructions.md
+Done
+
+You are out of free messages until 2:10 PM
+

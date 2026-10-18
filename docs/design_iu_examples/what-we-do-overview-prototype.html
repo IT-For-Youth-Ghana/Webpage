@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ITFYG — What We Do overview prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+/* ==========================================================================
+   ITFYG — WHAT WE DO OVERVIEW: TWO INTERACTIONS FOR REVIEW
+   --------------------------------------------------------------------------
+   1. The initiative orbit — eight circles, each opening into a named capsule.
+   2. The pathway tree — four stages holding 3 / 2 / 2 / 1 initiatives, with
+      the asymmetry preserved rather than flattened into four equal columns.
+
+   Palette and type verbatim from app/globals.css and tailwind.config.ts.
+   ========================================================================== */
+
+:root{
+  --color-primary:#1E72BA;
+  --color-primary-dark:#0152BE;
+  --color-primary-light:#E8F1FA;
+  --color-accent:#D70B52;
+  --color-accent-dark:#B00944;
+  --color-text:#1A1A1A;
+  --color-text-muted:#5C6672;
+  --color-bg:#FFFFFF;
+  --color-bg-alt:#F7F9FC;
+  --color-border:#D8E5F2;
+  --brand-deep:#142850;
+  --brand-mist:#E8F1FA;
+  --brand-warm:#FBE7EF;
+
+  --font-heading:Georgia,Cambria,"Times New Roman",serif;
+  --font-body:"Inter",system-ui,sans-serif;
+
+  --radius-control:0.375rem;
+  --radius-media:0.75rem;
+  --radius-panel:1.5rem;
+  --radius-capsule:999px;
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--color-bg);color:var(--color-text);
+  font-family:var(--font-body);font-size:1.0625rem;line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--font-heading);font-weight:700;letter-spacing:-0.025em;line-height:1.08;margin:0;}
+img{max-width:100%;display:block;}
+button{font:inherit;color:inherit;}
+a{color:inherit;text-decoration:none;}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,40px);}
+
+.section{padding:clamp(56px,8vw,104px) 0;}
+.section--mist{background:var(--brand-mist);opacity:1;}
+.section__head{max-width:62ch;margin-bottom:clamp(36px,5vw,60px);}
+.eyebrow{
+  display:flex;align-items:center;gap:12px;margin:0 0 16px;
+  font-size:11.5px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--color-text);
+}
+.eyebrow::before{content:"";width:26px;height:2px;background:var(--color-accent);flex:0 0 auto;}
+.section__title{font-size:clamp(2rem,4vw,3rem);}
+.section__lede{margin:18px 0 0;color:var(--color-text-muted);}
+
+/* ==========================================================================
+   1. THE INITIATIVE ORBIT
+   --------------------------------------------------------------------------
+   Eight circles in a row. As the pointer approaches, nearby circles scale up;
+   the nearest one opens, its circle staying put while the shape grows
+   rightwards into a named capsule. The circle does not get replaced by a
+   capsule, it BECOMES one, which is the capsule idea rather than a copy of the
+   homepage pill.
+   ========================================================================== */
+
+.orbit{
+  position:relative;
+  display:flex;align-items:center;
+  gap:18px;
+  min-height:260px;
+  padding:20px 0;
+  --node:120px;
+  --node-open:340px;
+}
+
+/* When one node opens, the rest shrink so the row still fits its column
+   instead of overflowing. Resting: 8*120 + 7*18 = 1086px. Open:
+   340 + 7*92 + 7*14 = 1082px. Both inside the 1180px measure. The row
+   breathing to make room is deliberate: it reads as one system reacting,
+   not as a card appearing on top of a static row. */
+.orbit:has(.orbit__node[aria-expanded="true"]){
+  gap:14px;
+  --node:92px;
+}
+.orbit__node{
+  position:relative;flex:0 0 auto;
+  display:flex;align-items:center;
+  width:var(--node);height:var(--node);
+  padding:0;border:none;background:none;
+  cursor:pointer;
+  border-radius:var(--radius-capsule);
+  transition:width .45s cubic-bezier(.16,.84,.44,1),
+             transform .3s ease,
+             background-color .35s ease,
+             box-shadow .35s ease;
+}
+.orbit__node:focus-visible{outline:none;box-shadow:0 0 0 3px #fff,0 0 0 6px var(--node-accent);}
+
+/* The lens: a circle that stays exactly the node's height, so the capsule's
+   end arc and the circle are the same arc at every state. */
+.orbit__lens{
+  position:relative;flex:0 0 auto;
+  width:var(--node);height:var(--node);
+  border-radius:50%;
+  overflow:hidden;
+  box-shadow:0 0 0 3px #fff, 0 0 0 5px var(--node-accent);
+  transition:box-shadow .35s ease;
+}
+.orbit__lens img{
+  width:100%;height:100%;object-fit:cover;object-position:50% 36%;
+  transition:transform .6s ease;
+}
+.orbit__lens::after{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:var(--node-accent);opacity:0.28;
+  transition:opacity .35s ease;
+}
+
+/* The text half, revealed as the node opens. */
+.orbit__body{
+  min-width:0;overflow:hidden;
+  padding-left:0;
+  opacity:0;
+  transition:opacity .3s ease .05s, padding-left .45s cubic-bezier(.16,.84,.44,1);
+  text-align:left;
+}
+.orbit__name{
+  display:block;
+  font-family:var(--font-heading);font-size:1.25rem;font-weight:700;
+  color:var(--color-text);white-space:nowrap;
+}
+.orbit__tag{
+  display:block;margin-top:4px;
+  font-size:12.5px;line-height:1.55;color:var(--color-text-muted);
+}
+
+/* Open state: the node widens into a capsule on a paper ground. */
+.orbit__node[aria-expanded="true"]{
+  width:var(--node-open);
+  background:#fff;
+  box-shadow:0 24px 60px -26px rgba(20,40,80,0.35);
+}
+.orbit__node[aria-expanded="true"] .orbit__lens::after{opacity:0.10;}
+.orbit__node[aria-expanded="true"] .orbit__lens img{transform:scale(1.06);}
+.orbit__node[aria-expanded="true"] .orbit__body{opacity:1;padding-left:18px;padding-right:26px;}
+
+.orbit__hint{
+  margin:8px 0 0;font-size:13px;color:var(--color-text-muted);
+}
+
+/* ==========================================================================
+   2. THE PATHWAY TREE
+   --------------------------------------------------------------------------
+   Four stages holding 3, 2, 2 and 1 initiatives. The column widths are
+   proportional to how many each stage holds, so the uneven distribution is
+   the layout rather than something the layout hides. A balanced four-column
+   grid would say all four stages are the same size, which is false.
+   ========================================================================== */
+
+.tree{position:relative;}
+.tree__spine{
+  position:relative;
+  display:grid;
+  grid-template-columns:3fr 2fr 2fr 1fr;
+  gap:20px;
+}
+.tree__stage{position:relative;}
+.tree__stage-head{
+  position:relative;
+  border-top:2px solid var(--stage-accent,var(--color-primary));
+  padding-top:18px;
+}
+.tree__stage-index{
+  font-family:var(--font-heading);font-size:12px;font-weight:700;
+  letter-spacing:0.16em;color:var(--color-text-muted);
+}
+.tree__stage-name{
+  margin-top:4px;
+  font-family:var(--font-heading);font-size:clamp(1.4rem,2.4vw,1.9rem);font-weight:700;
+}
+.tree__stage-count{
+  display:inline-block;margin-top:10px;
+  padding:3px 12px;border-radius:var(--radius-capsule);
+  background:var(--color-bg-alt);border:1px solid var(--color-border);
+  font-size:11.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--color-text-muted);
+}
+.tree__stage-copy{
+  margin:16px 0 0;font-size:14.5px;line-height:1.7;color:var(--color-text-muted);
+}
+
+/* Branches: each stage fans out to its own initiatives. */
+.tree__branches{margin-top:22px;display:grid;gap:10px;}
+.tree__leaf{
+  position:relative;
+  display:flex;align-items:center;gap:12px;
+  padding:10px 16px 10px 10px;
+  border:1px solid var(--color-border);
+  border-radius:var(--radius-capsule);
+  background:#fff;
+  transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.tree__leaf:hover,
+.tree__leaf:focus-visible{
+  outline:none;
+  transform:translateX(4px);
+  border-color:var(--leaf-accent);
+  box-shadow:0 10px 26px -14px rgba(20,40,80,0.3);
+}
+.tree__leaf-dot{
+  flex:0 0 auto;width:34px;height:34px;border-radius:50%;
+  background:var(--leaf-accent);
+  position:relative;overflow:hidden;
+}
+.tree__leaf-dot img{width:100%;height:100%;object-fit:cover;opacity:0.62;}
+.tree__leaf-name{font-size:14px;font-weight:600;line-height:1.35;}
+
+/* Amplify holds one initiative and its column is the narrowest. Its leaf is
+   allowed to be a full-height panel instead, so a single item does not read
+   as a mistake. */
+.tree__stage--single .tree__leaf{padding:14px 18px 14px 12px;}
+
+@media (max-width:900px){
+  .tree__spine{grid-template-columns:1fr;gap:36px;}
+}
+
+/* ==========================================================================
+   Reduced motion and small viewports
+   ========================================================================== */
+
+@media (max-width:820px){
+  /* Proximity is a pointer idea. Below this width the orbit becomes a plain
+     stack of open capsules: simpler, honest, fully readable. */
+  .orbit{flex-direction:column;align-items:stretch;gap:12px;min-height:0;}
+  .orbit__node{width:100% !important;background:#fff;box-shadow:0 10px 30px -18px rgba(20,40,80,0.3);}
+  .orbit{--node:76px;}
+  .orbit__body{opacity:1 !important;padding-left:16px !important;padding-right:18px !important;}
+  .orbit__name{white-space:normal;font-size:1.05rem;}
+  .orbit__hint{display:none;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .orbit__node,.orbit__lens,.orbit__lens img,.orbit__lens::after,
+  .orbit__body,.tree__leaf{transition:none !important;}
+  .orbit__node{transform:none !important;}
+}
+
+/* --- notes ---------------------------------------------------------------- */
+.notes{max-width:76ch;margin:0 auto;padding:clamp(56px,8vw,96px) clamp(20px,5vw,32px);}
+.notes h2{font-size:clamp(1.9rem,4vw,2.6rem);}
+.notes h3{margin-top:38px;font-size:1.3rem;}
+.notes p{margin:14px 0 0;color:var(--color-text-muted);}
+.notes p strong{color:var(--color-text);}
+.notes__rule{margin:44px 0 0;border:0;border-top:1px solid var(--color-border);}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+</style>
+</head>
+<body>
+
+<!-- ======================= 1. THE INITIATIVE ORBIT ======================= -->
+<section class="section section--mist">
+  <div class="wrap">
+    <div class="section__head">
+      <p class="eyebrow">Initiatives</p>
+      <h2 class="section__title">Eight connected initiatives</h2>
+      <p class="section__lede">
+        Each circle is one initiative. Move the pointer along the row and the nearest one opens into a named
+        capsule; click or tab to hold it open. On a touch device or a narrow screen the row becomes a plain
+        stack of open capsules instead.
+      </p>
+    </div>
+
+    <div class="orbit" data-orbit>
+      <!-- Populated from the eight real initiatives, in pathway order. -->
+    </div>
+    <p class="orbit__hint">Pointer, click, or keyboard — all three open a capsule.</p>
+    <p class="sr-only" role="status" aria-live="polite" data-orbit-live></p>
+  </div>
+</section>
+
+<!-- ======================= 2. THE PATHWAY TREE =========================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="section__head">
+      <p class="eyebrow">Pathways</p>
+      <h2 class="section__title">From first exposure to longer-term opportunity</h2>
+      <p class="section__lede">
+        The portfolio genuinely branches, and it branches unevenly: three initiatives bring learners in,
+        two build capability, two put it to work, and one carries the argument outward. The column widths
+        follow that distribution rather than smoothing it into four equal cards.
+      </p>
+    </div>
+
+    <div class="tree">
+      <div class="tree__spine" data-tree>
+        <!-- Populated from the four stages and their real initiatives. -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== NOTES ================================= -->
+<div class="notes" id="notes">
+  <p class="eyebrow">Prototype notes</p>
+  <h2>What these two interactions decide</h2>
+
+  <h3>The orbit is the capsule evolving, not repeating</h3>
+  <p>
+    The homepage hero is a large dark capsule holding one photograph at a time. Here the same underlying idea
+    appears at a completely different scale: eight small circles, and the one nearest the pointer grows
+    <strong>rightwards</strong> into a capsule while its circle stays exactly where it was. The circle is not
+    swapped for a capsule, it becomes the capsule's leading lobe, which is the same geometric premise as the
+    hero and a different object on screen.
+  </p>
+  <p>
+    Proximity uses the same falloff as the existing arc prototype, so the two feel related: scale rises as the
+    pointer closes, and the nearest node within a short radius opens. Every node is a real button, so click
+    toggles and keyboard focus opens. Below 820px the proximity behaviour is switched off entirely and the row
+    becomes a stack of already-open capsules, because a proximity effect on a touch screen is a broken version
+    of a pointer idea rather than a smaller one.
+  </p>
+
+  <h3>The pathway is a tree, and the tree is uneven on purpose</h3>
+  <p>
+    The current page renders the four stages as four equal cards in a four-column grid. That says the stages are
+    the same size, which is not true, and it never shows which initiative belongs to which stage even though the
+    copy names them.
+  </p>
+  <p>
+    This version makes the structure the layout. Columns are <strong>3fr 2fr 2fr 1fr</strong>, matching Discover
+    holding three initiatives, Develop two, Apply two, and Amplify one, and every stage fans out to its actual
+    initiatives as named branches carrying that initiative's own accent colour. The asymmetry is the information.
+    Amplify being a single narrow column is the honest picture of the portfolio, not a gap to be padded.
+  </p>
+  <p>
+    This is also the case for <em>not</em> using the capsule. The branches are small labelled pills rather than
+    capsules, because eight more capsules on the same page directly under the orbit would be the rerun the brief
+    warns about. The tree earns a different form.
+  </p>
+
+  <h3>Two notes for the implementation</h3>
+  <p>
+    The shrink-to-make-room behaviour uses <strong>:has()</strong> here because a prototype has no state to read.
+    In React it should be a class driven by the open index instead, which is both more robust and one less
+    browser-support question. The measured widths are the constraint to preserve: the row must fit its column in
+    both states, which is 1086px at rest and 1082px with one node open inside a 1100px measure.
+  </p>
+  <p>
+    Proximity is gated on <strong>(min-width: 821px) and (hover: hover)</strong> rather than width alone, so a
+    touch laptop does not get a pointer-only interaction it cannot drive.
+  </p>
+
+  <hr class="notes__rule" />
+  <p>
+    All eight initiative names, taglines, accent colours and photographs are the real ones from
+    <strong>lib/content/site-config.ts</strong>. The stage groupings are the four <strong>pathwayCards</strong>
+    exactly as written. Implementing this needs one content-model addition: the pathway cards do not currently
+    link to the initiatives they describe, so the grouping lives only in prose. That is called out for a decision
+    rather than guessed at.
+  </p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* Real initiatives: slug, name, tagline, accent, image — all from
+     lib/content/site-config.ts. Ordered by pathway stage. */
+  var INITIATIVES = {
+    "community-outreach":   { name:"Community Outreach",     accent:"#8B5E34", image:"../../public/images/randomPictures/studentslistening.jpg",              tag:"School visits and activations that turn first exposure into a clear next step." },
+    "rural-tech-connect":   { name:"Rural Tech Connect",     accent:"#2A6F97", image:"../../public/images/randomPictures/children_holding_sign_in_streets.jpg", tag:"Training, devices and opportunity for young people beyond Accra." },
+    "tech-clubs":           { name:"Tech Clubs",             accent:"#1F7A8C", image:"../../public/images/randomPictures/studentgroupguys.jpg",               tag:"School-based clubs giving students consistent practice and peer learning." },
+    "girls-in-tech":        { name:"Girls in Tech",          accent:"#D70B52", image:"../../public/images/randomPictures/group_girls.jpg",                    tag:"Mentorship and technical training for young women in Ghana's digital economy." },
+    "youth-academy":        { name:"Youth Tech Academy",     accent:"#1E72BA", image:"../../public/images/randomPictures/studentsBackcoding.jpg",             tag:"Cohort training from foundational skills to job-ready portfolios in 12 weeks." },
+    "code-impact-challenge":{ name:"Code Impact Challenge",  accent:"#C44900", image:"../../public/images/randomPictures/redstudentgrouplesson.jpg",          tag:"Team-based challenges building real solutions for real communities." },
+    "entrepreneurship-hub": { name:"Entrepreneurship Hub",   accent:"#0152BE", image:"../../public/images/randomPictures/studentpresenting.jpg",              tag:"Support for young founders turning digital skills into early-stage ventures." },
+    "advocacy":             { name:"Advocacy",               accent:"#A63D40", image:"../../public/images/randomPictures/graduationspeaking.jpg",             tag:"Coalition-building that puts youth digital opportunity on the agenda." }
+  };
+
+  /* The four stages exactly as pathwayCards defines them. */
+  var STAGES = [
+    { name:"Discover", accent:"#8B5E34", slugs:["community-outreach","rural-tech-connect","tech-clubs"],
+      copy:"Community Outreach, Rural Tech Connect and Tech Clubs bring more learners into the ecosystem early and repeatedly, especially in schools and underserved communities." },
+    { name:"Develop", accent:"#D70B52", slugs:["girls-in-tech","youth-academy"],
+      copy:"Girls in Tech and Youth Tech Academy create the confidence, discipline and practical skills needed for deeper progress." },
+    { name:"Apply", accent:"#C44900", slugs:["code-impact-challenge","entrepreneurship-hub"],
+      copy:"Code Impact Challenge and Entrepreneurship Hub help learners test their skills in public, collaborative and venture-facing formats." },
+    { name:"Amplify", accent:"#A63D40", slugs:["advocacy"],
+      copy:"Advocacy and partner-facing work keep making youth digital opportunity more possible at scale." }
+  ];
+
+  var ORDER = ["community-outreach","rural-tech-connect","tech-clubs","girls-in-tech","youth-academy","code-impact-challenge","entrepreneurship-hub","advocacy"];
+
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var pointerFine  = window.matchMedia("(min-width: 821px) and (hover: hover)").matches;
+
+  /* ------------------------------------------------------------ the orbit */
+  var orbit = document.querySelector("[data-orbit]");
+  var live  = document.querySelector("[data-orbit-live]");
+
+  ORDER.forEach(function(slug){
+    var it = INITIATIVES[slug];
+    var node = document.createElement("button");
+    node.type = "button";
+    node.className = "orbit__node";
+    node.setAttribute("aria-expanded", "false");
+    node.style.setProperty("--node-accent", it.accent);
+    node.dataset.slug = slug;
+
+    node.innerHTML =
+      '<span class="orbit__lens"><img src="' + it.image + '" alt="" /></span>' +
+      '<span class="orbit__body">' +
+        '<span class="orbit__name">' + it.name + '</span>' +
+        '<span class="orbit__tag">' + it.tag + '</span>' +
+      '</span>';
+
+    orbit.appendChild(node);
+  });
+
+  var nodes = Array.prototype.slice.call(orbit.querySelectorAll(".orbit__node"));
+
+  function closeAll(){
+    nodes.forEach(function(n){ n.setAttribute("aria-expanded", "false"); });
+  }
+  function open(node){
+    if (!node) return;
+    closeAll();
+    node.setAttribute("aria-expanded", "true");
+    if (live) live.textContent = INITIATIVES[node.dataset.slug].name + " — " + INITIATIVES[node.dataset.slug].tag;
+  }
+  function resetScale(){
+    nodes.forEach(function(n){ n.style.transform = "scale(1)"; });
+  }
+
+  if (pointerFine && !reduceMotion) {
+    /* Same falloff as the existing arc prototype so the two read as one family. */
+    orbit.addEventListener("mousemove", function(event){
+      var nearest = null, nearestDist = Infinity;
+
+      nodes.forEach(function(node){
+        var lens = node.querySelector(".orbit__lens");
+        var rect = lens.getBoundingClientRect();
+        var cx = rect.left + rect.width / 2;
+        var cy = rect.top + rect.height / 2;
+        var dist = Math.hypot(event.clientX - cx, event.clientY - cy);
+        var proximity = Math.max(0, 1 - dist / 140);
+        node.style.transform = "scale(" + (1 + proximity * 0.14).toFixed(3) + ")";
+        if (dist < nearestDist) { nearestDist = dist; nearest = node; }
+      });
+
+      if (nearest && nearestDist < 90) open(nearest);
+      else closeAll();
+    });
+
+    orbit.addEventListener("mouseleave", function(){
+      resetScale();
+      closeAll();
+    });
+  }
+
+  /* Click and keyboard always work, pointer proximity or not. */
+  nodes.forEach(function(node){
+    node.addEventListener("click", function(){
+      var wasOpen = node.getAttribute("aria-expanded") === "true";
+      closeAll();
+      if (!wasOpen) open(node);
+    });
+    node.addEventListener("focus", function(){ open(node); });
+  });
+
+  /* ------------------------------------------------------------- the tree */
+  var tree = document.querySelector("[data-tree]");
+
+  STAGES.forEach(function(stage, index){
+    var col = document.createElement("div");
+    col.className = "tree__stage" + (stage.slugs.length === 1 ? " tree__stage--single" : "");
+    col.style.setProperty("--stage-accent", stage.accent);
+
+    var branches = stage.slugs.map(function(slug){
+      var it = INITIATIVES[slug];
+      return '' +
+        '<a class="tree__leaf" href="/what-we-do/' + slug + '" style="--leaf-accent:' + it.accent + '">' +
+          '<span class="tree__leaf-dot"><img src="' + it.image + '" alt="" /></span>' +
+          '<span class="tree__leaf-name">' + it.name + '</span>' +
+        '</a>';
+    }).join("");
+
+    col.innerHTML =
+      '<div class="tree__stage-head">' +
+        '<p class="tree__stage-index">STAGE ' + String(index + 1).padStart(2, "0") + '</p>' +
+        '<h3 class="tree__stage-name">' + stage.name + '</h3>' +
+        '<span class="tree__stage-count">' + stage.slugs.length +
+          (stage.slugs.length === 1 ? " initiative" : " initiatives") + '</span>' +
+        '<p class="tree__stage-copy">' + stage.copy + '</p>' +
+      '</div>' +
+      '<div class="tree__branches">' + branches + '</div>';
+
+    tree.appendChild(col);
+  });
+})();
+</script>
+
+</body>
+</html>

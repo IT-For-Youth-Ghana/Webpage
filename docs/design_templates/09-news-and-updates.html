@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="IT For Youth Ghana — News & Updates editorial concept" />
+  <title>News & Updates — IT For Youth Ghana</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --paper:#fff;
+      --warm:#fbf8f2;
+      --mist:#eef2f8;
+      --ink:#11233f;
+      --ink-soft:#5b6677;
+      --navy:#0c2d5a;
+      --navy-deep:#081d3d;
+      --gold:#f5a623;
+      --gold-soft:#fff1d6;
+      --teal:#157f6b;
+      --teal-deep:#0b4a3d;
+      --border:#dde4ee;
+      --max:1240px;
+      --shadow:0 26px 80px rgba(8,29,61,.12);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:"DM Sans",system-ui,sans-serif;
+      color:var(--ink);
+      background:var(--paper);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+      overflow-x:hidden
+    }
+    img{display:block;width:100%;height:100%;object-fit:cover}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3,.display{
+      font-family:"Playfair Display",Georgia,serif;
+      line-height:1.02;
+      letter-spacing:-.03em
+    }
+
+    .shell{width:min(var(--max),calc(100% - 48px));margin-inline:auto}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:10px;
+      margin-bottom:18px;font-size:.76rem;font-weight:700;
+      letter-spacing:.15em;text-transform:uppercase;color:var(--teal)
+    }
+    .eyebrow::before{content:"";width:22px;height:2px;background:currentColor}
+
+    .button{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:52px;padding:0 26px;border-radius:999px;
+      border:1px solid transparent;font-size:.94rem;font-weight:700;
+      transition:transform .18s ease,background .18s ease
+    }
+    .button:hover{transform:translateY(-2px)}
+    .button--gold{background:var(--gold);color:var(--navy-deep)}
+    .button--navy{background:var(--navy);color:#fff}
+    .button--light{background:#fff;color:var(--navy);border-color:rgba(12,45,90,.18)}
+    a:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
+
+    .site-header{
+      position:sticky;top:0;z-index:50;
+      background:rgba(255,255,255,.94);backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(17,35,63,.08)
+    }
+    .nav{
+      min-height:78px;display:grid;grid-template-columns:auto 1fr auto;
+      align-items:center;gap:28px
+    }
+    .brand{display:inline-flex;flex-direction:column;line-height:1}
+    .brand strong{font-size:1.65rem;letter-spacing:-.04em;color:var(--navy)}
+    .brand small{margin-top:5px;font-size:.58rem;font-weight:700;letter-spacing:.22em;color:var(--ink-soft)}
+    .nav-links{display:flex;justify-content:center;gap:clamp(18px,3vw,38px);font-size:.91rem;font-weight:600;color:#293951}
+    .nav-links a{position:relative;padding:8px 0}
+    .nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:2px;height:2px;background:var(--gold);transition:right .18s ease}
+    .nav-links a:hover::after,.nav-links a[aria-current="page"]::after{right:0}
+
+    /* Hero */
+    .hero{
+      padding:28px 0 90px;
+      background:var(--warm)
+    }
+    .hero-top{
+      display:grid;
+      grid-template-columns:.72fr 1.28fr;
+      gap:48px;
+      align-items:end;
+      margin-bottom:44px
+    }
+    .hero-top h1{
+      font-size:clamp(4.2rem,7vw,7.5rem);
+      color:var(--navy-deep)
+    }
+    .hero-top h1 em{font-style:italic;color:var(--gold)}
+    .hero-top p{
+      max-width:58ch;
+      justify-self:end;
+      color:var(--ink-soft);
+      font-size:1.05rem
+    }
+
+    .lead-grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:24px
+    }
+
+    .lead-story{
+      position:relative;
+      min-height:670px;
+      border-radius:44px;
+      overflow:hidden;
+      box-shadow:var(--shadow)
+    }
+    .lead-story::after{
+      content:"";
+      position:absolute;inset:0;
+      background:linear-gradient(0deg,rgba(8,29,61,.92),rgba(8,29,61,.04) 62%)
+    }
+    .lead-copy{
+      position:absolute;
+      z-index:2;
+      left:38px;right:38px;bottom:36px;
+      color:#fff
+    }
+    .lead-copy .eyebrow{color:var(--gold)}
+    .lead-copy h2{
+      max-width:820px;
+      font-size:clamp(3rem,5vw,5.5rem)
+    }
+    .lead-copy p{
+      max-width:60ch;
+      margin-top:18px;
+      color:rgba(255,255,255,.74)
+    }
+
+    .lead-side{
+      display:grid;
+      gap:24px
+    }
+    .side-story{
+      min-height:323px;
+      border-radius:34px;
+      overflow:hidden;
+      position:relative
+    }
+    .side-story::after{
+      content:"";
+      position:absolute;inset:0;
+      background:linear-gradient(0deg,rgba(8,29,61,.84),rgba(8,29,61,.02) 62%)
+    }
+    .side-copy{
+      position:absolute;z-index:2;left:24px;right:24px;bottom:22px;color:#fff
+    }
+    .side-copy small{
+      color:var(--gold);
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      font-size:.7rem;
+      font-weight:700
+    }
+    .side-copy h3{
+      margin-top:8px;
+      font-size:clamp(1.7rem,2.7vw,2.6rem)
+    }
+
+    /* News desk */
+    .news-desk{
+      padding:118px 0;
+      background:#fff
+    }
+    .section-head{
+      display:grid;
+      grid-template-columns:.9fr 1.1fr;
+      gap:48px;
+      align-items:end;
+      margin-bottom:54px
+    }
+    .section-head h2{
+      font-size:clamp(3.1rem,5vw,5.7rem);
+      color:var(--navy-deep)
+    }
+    .section-head p{
+      max-width:56ch;
+      justify-self:end;
+      color:var(--ink-soft)
+    }
+    .desk-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:34px
+    }
+    .desk-feature{
+      min-height:580px;
+      border-radius:42px;
+      overflow:hidden;
+      position:relative
+    }
+    .desk-feature::after{
+      content:"";
+      position:absolute;inset:0;
+      background:linear-gradient(0deg,rgba(8,29,61,.88),transparent 62%)
+    }
+    .desk-feature-copy{
+      position:absolute;z-index:2;left:32px;right:32px;bottom:30px;color:#fff
+    }
+    .desk-feature-copy small{
+      color:var(--gold);
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      font-size:.72rem;
+      font-weight:700
+    }
+    .desk-feature-copy h3{
+      margin-top:10px;
+      font-size:clamp(2.5rem,4vw,4.2rem)
+    }
+
+    .desk-list{
+      display:grid;
+      align-content:start
+    }
+    .desk-item{
+      display:grid;
+      grid-template-columns:.88fr 1.12fr;
+      gap:22px;
+      padding:24px 0;
+      border-bottom:1px solid var(--border)
+    }
+    .desk-item:first-child{padding-top:0}
+    .desk-item-media{
+      min-height:170px;
+      border-radius:24px;
+      overflow:hidden
+    }
+    .desk-item-copy{
+      align-self:center
+    }
+    .desk-item-copy small{
+      color:var(--teal);
+      font-size:.7rem;
+      font-weight:700;
+      letter-spacing:.09em;
+      text-transform:uppercase
+    }
+    .desk-item-copy h3{
+      margin-top:8px;
+      font-size:1.6rem
+    }
+    .desk-item-copy p{
+      margin-top:10px;
+      font-size:.88rem;
+      color:var(--ink-soft)
+    }
+
+    /* Blogs / Ideas */
+    .ideas{
+      padding:118px 0;
+      background:var(--mist)
+    }
+    .ideas-stage{
+      display:grid;
+      grid-template-columns:.78fr 1.22fr;
+      gap:36px;
+      align-items:stretch
+    }
+    .ideas-intro{
+      border-radius:42px;
+      padding:clamp(46px,5vw,68px);
+      background:var(--navy);
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      justify-content:center
+    }
+    .ideas-intro .eyebrow{color:var(--gold)}
+    .ideas-intro h2{
+      font-size:clamp(3rem,4.8vw,5.3rem)
+    }
+    .ideas-intro p{
+      margin-top:24px;
+      color:rgba(255,255,255,.7)
+    }
+
+    .ideas-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:24px
+    }
+    .idea-card{
+      border-radius:34px;
+      overflow:hidden;
+      background:#fff;
+      border:1px solid var(--border)
+    }
+    .idea-card-media{
+      height:250px
+    }
+    .idea-card-copy{
+      padding:28px
+    }
+    .idea-card-copy small{
+      color:var(--teal);
+      font-size:.7rem;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.09em
+    }
+    .idea-card-copy h3{
+      margin-top:10px;
+      font-size:1.85rem;
+      color:var(--navy)
+    }
+    .idea-card-copy p{
+      margin-top:10px;
+      color:var(--ink-soft);
+      font-size:.9rem
+    }
+
+    /* Feature essay */
+    .essay{
+      padding:118px 0;
+      background:var(--warm)
+    }
+    .essay-stage{
+      display:grid;
+      grid-template-columns:.84fr 1.16fr;
+      min-height:610px;
+      border-radius:999px 42px 42px 999px;
+      overflow:hidden;
+      background:var(--navy-deep);
+      color:#fff
+    }
+    .essay-media{
+      margin:24px 0 24px 24px;
+      border-radius:999px;
+      overflow:hidden;
+      min-height:562px
+    }
+    .essay-copy{
+      padding:clamp(46px,6vw,82px);
+      display:flex;
+      flex-direction:column;
+      justify-content:center
+    }
+    .essay-copy .eyebrow{color:var(--gold)}
+    .essay-copy h2{
+      font-size:clamp(3rem,5vw,5.5rem)
+    }
+    .essay-copy p{
+      margin-top:24px;
+      max-width:58ch;
+      color:rgba(255,255,255,.72)
+    }
+    .essay-quote{
+      margin-top:28px;
+      padding-left:24px;
+      border-left:3px solid var(--gold);
+      font-family:"Playfair Display",Georgia,serif;
+      font-style:italic;
+      font-size:clamp(1.35rem,2vw,1.8rem);
+      line-height:1.45;
+      color:rgba(255,255,255,.85)
+    }
+
+    /* Topics */
+    .topics{
+      padding:118px 0;
+      background:#fff
+    }
+    .topics-row{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:1px;
+      background:var(--border);
+      border:1px solid var(--border);
+      border-radius:32px;
+      overflow:hidden
+    }
+    .topic{
+      background:#fff;
+      padding:34px 30px;
+      min-height:220px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between
+    }
+    .topic strong{
+      font-family:"Playfair Display",Georgia,serif;
+      font-size:1.7rem;
+      color:var(--navy)
+    }
+    .topic p{
+      margin-top:14px;
+      color:var(--ink-soft);
+      font-size:.88rem
+    }
+
+    /* Newsletter */
+    .newsletter{
+      padding:118px 0;
+      background:var(--teal-deep);
+      color:#fff
+    }
+    .newsletter-stage{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:44px;
+      align-items:center
+    }
+    .newsletter-copy .eyebrow{color:var(--gold)}
+    .newsletter-copy h2{
+      font-size:clamp(3.1rem,5vw,5.7rem)
+    }
+    .newsletter-copy p{
+      margin-top:24px;
+      max-width:55ch;
+      color:rgba(255,255,255,.68)
+    }
+    .newsletter-form{
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:34px;
+      padding:34px
+    }
+    .newsletter-form label{
+      display:block;
+      font-weight:700;
+      margin-bottom:12px
+    }
+    .newsletter-form input{
+      width:100%;
+      min-height:54px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.2);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      padding:0 20px;
+      font:inherit
+    }
+    .newsletter-form input::placeholder{color:rgba(255,255,255,.5)}
+    .newsletter-form .button{margin-top:14px;width:100%}
+
+    footer{
+      padding:72px 0 34px;
+      background:var(--navy-deep);
+      color:rgba(255,255,255,.68)
+    }
+    .footer-main{
+      display:grid;
+      grid-template-columns:1.2fr .8fr .8fr;
+      gap:44px;
+      padding-bottom:48px;
+      border-bottom:1px solid rgba(255,255,255,.12)
+    }
+    footer .brand strong{color:#fff}
+    .footer-copy{max-width:42ch;margin-top:18px;color:rgba(255,255,255,.58)}
+    .footer-group strong{display:block;margin-bottom:16px;color:#fff}
+    .footer-group a{display:block;margin:8px 0;font-size:.9rem}
+    .footer-bottom{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      padding-top:26px;
+      font-size:.78rem
+    }
+
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.is-visible{opacity:1;transform:none}
+
+    @media(max-width:1040px){
+      .hero-top,.lead-grid,.section-head,.desk-grid,.ideas-stage,.essay-stage,.newsletter-stage{
+        grid-template-columns:1fr
+      }
+      .hero-top p,.section-head p{justify-self:start}
+      .lead-story{min-height:600px}
+      .lead-side{grid-template-columns:1fr 1fr}
+      .ideas-grid{grid-template-columns:1fr 1fr}
+      .essay-stage{border-radius:42px}
+      .essay-media{
+        margin:24px 24px 0;
+        border-radius:999px 999px 42px 42px;
+        min-height:500px
+      }
+    }
+
+    @media(max-width:820px){
+      .nav{grid-template-columns:1fr auto}
+      .nav-links{display:none}
+      .lead-side,.ideas-grid,.topics-row{
+        grid-template-columns:1fr
+      }
+      .desk-item{
+        grid-template-columns:.88fr 1.12fr
+      }
+      .footer-main{grid-template-columns:1fr}
+      .footer-bottom{flex-direction:column}
+    }
+
+    @media(max-width:680px){
+      .shell{width:min(calc(100% - 28px),var(--max))}
+      .nav{min-height:68px;gap:14px}
+      .brand strong{font-size:1.35rem}
+      .site-header .button{min-height:44px;padding:0 18px;font-size:.82rem}
+
+      .hero{padding-top:14px;padding-bottom:80px}
+      .hero-top h1{font-size:clamp(3.2rem,15vw,4.9rem)}
+      .lead-story,.side-story,.desk-feature,.ideas-intro,.idea-card,.newsletter-form{
+        border-radius:28px
+      }
+      .lead-story{min-height:560px}
+      .lead-copy{left:24px;right:24px;bottom:24px}
+      .side-story{min-height:300px}
+
+      .news-desk,.ideas,.essay,.topics,.newsletter{
+        padding-top:84px;padding-bottom:84px
+      }
+
+      .desk-feature{min-height:500px}
+      .desk-feature-copy{left:24px;right:24px;bottom:24px}
+      .desk-item{grid-template-columns:1fr}
+      .desk-item-media{min-height:240px}
+
+      .ideas-intro{padding:42px 26px}
+      .idea-card-media{height:230px}
+
+      .essay-media{min-height:430px;margin:16px 16px 0}
+      .essay-copy{padding:38px 26px 48px}
+
+      .topic{min-height:190px;padding:28px 24px}
+      .newsletter-form{padding:28px}
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      .reveal{opacity:1;transform:none;transition:none}
+      .button{transition:none}
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="shell nav">
+      <a class="brand" href="#" aria-label="IT For Youth Ghana homepage">
+        <strong>ITFYG</strong>
+        <small>IT FOR YOUTH GHANA</small>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#">Who we are</a>
+        <a href="#">What we do</a>
+        <a href="#">Our impact</a>
+        <a href="#" aria-current="page">News & updates</a>
+        <a href="#">Get involved</a>
+      </nav>
+
+      <a class="button button--gold" href="#">Support our work</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell">
+        <div class="hero-top reveal">
+          <div>
+            <span class="eyebrow">News & updates</span>
+            <h1>The work, the ideas and the <em>stories around them.</em></h1>
+          </div>
+          <p>
+            A digital publication for programme news, field stories, ideas, partnerships, opportunities and reflections from across ITFYG.
+          </p>
+        </div>
+
+        <div class="lead-grid">
+          <article class="lead-story reveal">
+            <img
+              src="https://images.unsplash.com/photo-1526253038957-bce54e05968e?auto=format&fit=crop&w=1700&q=85"
+              alt="Young people collaborating on laptops during a technology learning session"
+            />
+            <div class="lead-copy">
+              <span class="eyebrow">Feature</span>
+              <h2>What young people need after the first workshop.</h2>
+              <p>
+                The strongest digital-skills programmes are not built around one exciting day. They create a route for practice, mentorship, projects and another step after the room empties.
+              </p>
+            </div>
+          </article>
+
+          <div class="lead-side">
+            <article class="side-story reveal">
+              <img
+                src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1000&q=85"
+                alt="Students collaborating together in a classroom environment"
+              />
+              <div class="side-copy">
+                <small>News</small>
+                <h3>Community tech clubs expand learning beyond one event.</h3>
+              </div>
+            </article>
+
+            <article class="side-story reveal">
+              <img
+                src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=85"
+                alt="A team of professionals gathered around a table in discussion"
+              />
+              <div class="side-copy">
+                <small>Partnerships</small>
+                <h3>Why partnership storytelling builds trust.</h3>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="news-desk">
+      <div class="shell">
+        <div class="section-head reveal">
+          <div>
+            <span class="eyebrow">Latest news</span>
+            <h2>A news desk, not a wall of identical cards.</h2>
+          </div>
+          <p>
+            Timely announcements, programme updates and organisational news should be easier to scan than long-form features while still retaining strong editorial hierarchy.
+          </p>
+        </div>
+
+        <div class="desk-grid">
+          <article class="desk-feature reveal">
+            <img
+              src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1500&q=85"
+              alt="Young adults gathered around a laptop while learning together"
+            />
+            <div class="desk-feature-copy">
+              <small>Programme update</small>
+              <h3>Cohort 8 scholarship campaign opens new training spaces.</h3>
+            </div>
+          </article>
+
+          <div class="desk-list">
+            <article class="desk-item reveal">
+              <div class="desk-item-media">
+                <img
+                  src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=900&q=85"
+                  alt="Young learners participating in a community learning programme"
+                />
+              </div>
+              <div class="desk-item-copy">
+                <small>Community</small>
+                <h3>Community tech clubs expansion</h3>
+                <p>More spaces for ongoing practice, peer learning and local participation.</p>
+              </div>
+            </article>
+
+            <article class="desk-item reveal">
+              <div class="desk-item-media">
+                <img
+                  src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=85"
+                  alt="A professional team collaborating during a strategic meeting"
+                />
+              </div>
+              <div class="desk-item-copy">
+                <small>Organisation</small>
+                <h3>Rebuild foundation update</h3>
+                <p>A concise organisational update can stay informative without looking like a corporate memo.</p>
+              </div>
+            </article>
+
+            <article class="desk-item reveal">
+              <div class="desk-item-media">
+                <img
+                  src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=900&q=85"
+                  alt="A facilitator presenting to a learning group"
+                />
+              </div>
+              <div class="desk-item-copy">
+                <small>Event</small>
+                <h3>Digital skills fair preview</h3>
+                <p>Event stories can lead with programme experience and what participants can expect.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ideas">
+      <div class="shell ideas-stage">
+        <div class="ideas-intro reveal">
+          <span class="eyebrow">Blogs & ideas</span>
+          <h2>Some stories need room to think.</h2>
+          <p>
+            The blog side of the publication should feel more reflective and essay-led than the news desk. Longer headlines, more breathing room and more space for ideas are appropriate here.
+          </p>
+          <a class="button button--gold" href="#" style="margin-top:30px">Browse all blogs</a>
+        </div>
+
+        <div class="ideas-grid">
+          <article class="idea-card reveal">
+            <div class="idea-card-media">
+              <img
+                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=85"
+                alt="A digital analytics dashboard displayed on a laptop"
+              />
+            </div>
+            <div class="idea-card-copy">
+              <small>Digital strategy</small>
+              <h3>Why homepage clarity matters.</h3>
+              <p>A website can say everything and still fail to tell a visitor what matters first.</p>
+            </div>
+          </article>
+
+          <article class="idea-card reveal">
+            <div class="idea-card-media">
+              <img
+                src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1000&q=85"
+                alt="A team discussing ideas together during a workshop"
+              />
+            </div>
+            <div class="idea-card-copy">
+              <small>Partnerships</small>
+              <h3>Why partnership storytelling builds trust.</h3>
+              <p>Strong stories show what collaboration enabled instead of stopping at the announcement.</p>
+            </div>
+          </article>
+
+          <article class="idea-card reveal">
+            <div class="idea-card-media">
+              <img
+                src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1000&q=85"
+                alt="A mentor supporting learners during a practical learning session"
+              />
+            </div>
+            <div class="idea-card-copy">
+              <small>Learning</small>
+              <h3>Mentor labs and practical confidence.</h3>
+              <p>Technical confidence grows differently when learners can test ideas with someone experienced nearby.</p>
+            </div>
+          </article>
+
+          <article class="idea-card reveal">
+            <div class="idea-card-media">
+              <img
+                src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=85"
+                alt="Students learning and talking together in a group"
+              />
+            </div>
+            <div class="idea-card-copy">
+              <small>Youth development</small>
+              <h3>What comes after the first workshop?</h3>
+              <p>The question that should shape any serious programme designed around long-term opportunity.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="essay">
+      <div class="shell essay-stage reveal">
+        <div class="essay-media">
+          <img
+            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=85"
+            alt="Young people collaborating around a laptop during a learning session"
+          />
+        </div>
+
+        <div class="essay-copy">
+          <span class="eyebrow">Editor's feature</span>
+          <h2>A good publication should help the organisation think in public.</h2>
+          <p>
+            News tells people what happened. Essays can explore why it matters, what was learned, what remains difficult and how the organisation's thinking is changing.
+          </p>
+          <div class="essay-quote">
+            “The magazine should become a record of the work, not merely a marketing surface around it.”
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="topics">
+      <div class="shell">
+        <div class="section-head reveal">
+          <div>
+            <span class="eyebrow">Browse by theme</span>
+            <h2>Find the part of the story you care about.</h2>
+          </div>
+          <p>
+            Topic navigation gives readers another way into the publication without making the homepage itself feel like a filter interface.
+          </p>
+        </div>
+
+        <div class="topics-row">
+          <a class="topic reveal" href="#">
+            <strong>Programmes</strong>
+            <p>Training, clubs, outreach, challenges and learner experiences.</p>
+          </a>
+          <a class="topic reveal" href="#">
+            <strong>Impact</strong>
+            <p>Evidence, outcomes, reports and what changes after participation.</p>
+          </a>
+          <a class="topic reveal" href="#">
+            <strong>Partnerships</strong>
+            <p>Collaboration, institutions and what becomes possible together.</p>
+          </a>
+          <a class="topic reveal" href="#">
+            <strong>Ideas</strong>
+            <p>Reflections on digital skills, youth opportunity, learning and technology.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="newsletter">
+      <div class="shell newsletter-stage reveal">
+        <div class="newsletter-copy">
+          <span class="eyebrow">Stay connected</span>
+          <h2>Follow the work as it develops.</h2>
+          <p>
+            A restrained newsletter invitation can close the publication without turning the page into a conversion funnel.
+          </p>
+        </div>
+
+        <form class="newsletter-form">
+          <label for="email">Email address</label>
+          <input id="email" type="email" placeholder="you@example.com" aria-label="Email address" />
+          <button class="button button--gold" type="button">Subscribe to updates</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-main">
+        <div>
+          <a class="brand" href="#">
+            <strong>ITFYG</strong>
+            <small>IT FOR YOUTH GHANA</small>
+          </a>
+          <p class="footer-copy">
+            Building practical digital skills, confidence and opportunity with young people across Ghana.
+          </p>
+        </div>
+
+        <div class="footer-group">
+          <strong>Publication</strong>
+          <a href="#">News</a>
+          <a href="#">Blogs</a>
+          <a href="#">Impact stories</a>
+          <a href="#">Programme updates</a>
+        </div>
+
+        <div class="footer-group">
+          <strong>Explore</strong>
+          <a href="#">What we do</a>
+          <a href="#">Our impact</a>
+          <a href="#">Partner with us</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 IT For Youth Ghana — News & Updates redesign concept</span>
+        <span>Photography and article copy in this prototype are temporary design placeholders.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const elements = document.querySelectorAll(".reveal");
+
+      if (reduced || !("IntersectionObserver" in window)) {
+        elements.forEach(el => el.classList.add("is-visible"));
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          obs.unobserve(entry.target);
+        });
+      }, { threshold: 0.12 });
+
+      elements.forEach(el => observer.observe(el));
+    })();
+  </script>
+</body>
+</html>

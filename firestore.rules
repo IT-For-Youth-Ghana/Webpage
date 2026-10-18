@@ -1,0 +1,16 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // All application data is accessed through authenticated Next.js server
+    // routes using the Firebase Admin SDK. The Admin SDK is governed by IAM
+    // and bypasses these client security rules.
+    //
+    // Denying direct client access prevents visitors—or authenticated Firebase
+    // users—from reading CMS data, changing roles, editing content, viewing
+    // submissions, or writing around the validation and audit logic in the API.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

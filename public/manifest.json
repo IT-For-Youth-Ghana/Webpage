@@ -1,11 +1,11 @@
 {
   "name": "IT for Youth Ghana",
   "short_name": "IT Youth Ghana",
-  "description": "Empowering Ghana's youth through technology education and digital skills training",
+  "description": "Next.js rebuild foundation for IT For Youth Ghana",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#0152be",
+  "theme_color": "#0c2d5a",
   "orientation": "portrait-primary",
   "icons": [
     {

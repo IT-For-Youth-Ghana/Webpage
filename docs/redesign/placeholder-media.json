@@ -1,0 +1,508 @@
+{
+  "$comment": "Replacement map for externally sourced placeholder photography. Not an asset audit. Every external image URL that appears in application source must have an entry here, and lib/content/placeholder-registry.test.ts fails the build when one does not. Delete an entry when its slot receives final ITFYG media.",
+  "orientations": [
+    "portrait",
+    "square",
+    "landscape",
+    "wide",
+    "panoramic"
+  ],
+  "placeholders": [
+    {
+      "route": "/what-we-do/youth-academy",
+      "section": "hero",
+      "url": "https://images.unsplash.com/photo-1528901166007-3784c7dd3653?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "wide",
+      "role": "Youth Tech Academy hero photograph",
+      "replacement": "Replace with a wide ITFYG frame of a Youth Tech Academy cohort working through a build session in the ITFYG lab."
+    },
+    {
+      "route": "/what-we-do/youth-academy",
+      "section": "overview",
+      "url": "https://images.unsplash.com/photo-1526253038957-bce54e05968e?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "Youth Tech Academy overview photograph",
+      "replacement": "Replace with an ITFYG frame showing a Youth Tech Academy cohort working through a build session in the ITFYG lab in closer detail."
+    },
+    {
+      "route": "/what-we-do/youth-academy",
+      "section": "gallery-1",
+      "url": "https://images.unsplash.com/photo-1526253038957-bce54e05968e?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Youth Tech Academy gallery frame 1",
+      "replacement": "Replace with a documentary ITFYG frame of a Youth Tech Academy cohort working through a build session in the ITFYG lab."
+    },
+    {
+      "route": "/what-we-do/youth-academy",
+      "section": "gallery-2",
+      "url": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Youth Tech Academy gallery frame 2",
+      "replacement": "Replace with a documentary ITFYG frame of a Youth Tech Academy cohort working through a build session in the ITFYG lab."
+    },
+    {
+      "route": "/what-we-do/youth-academy",
+      "section": "gallery-3",
+      "url": "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Youth Tech Academy gallery frame 3",
+      "replacement": "Replace with a documentary ITFYG frame of a Youth Tech Academy cohort working through a build session in the ITFYG lab."
+    },
+    {
+      "route": "/what-we-do/youth-academy",
+      "section": "gallery-4",
+      "url": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Youth Tech Academy gallery frame 4",
+      "replacement": "Replace with a documentary ITFYG frame of a Youth Tech Academy cohort working through a build session in the ITFYG lab."
+    },
+    {
+      "route": "/what-we-do/girls-in-tech",
+      "section": "hero",
+      "url": "https://images.unsplash.com/photo-1744809495173-217ca4faa8bc?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "wide",
+      "role": "Girls in Tech hero photograph",
+      "replacement": "Replace with a wide ITFYG frame of young women on a Girls in Tech cohort working at their own machines."
+    },
+    {
+      "route": "/what-we-do/girls-in-tech",
+      "section": "overview",
+      "url": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "Girls in Tech overview photograph",
+      "replacement": "Replace with an ITFYG frame showing young women on a Girls in Tech cohort working at their own machines in closer detail."
+    },
+    {
+      "route": "/what-we-do/girls-in-tech",
+      "section": "gallery-1",
+      "url": "https://images.unsplash.com/photo-1744809495173-217ca4faa8bc?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Girls in Tech gallery frame 1",
+      "replacement": "Replace with a documentary ITFYG frame of young women on a Girls in Tech cohort working at their own machines."
+    },
+    {
+      "route": "/what-we-do/girls-in-tech",
+      "section": "gallery-2",
+      "url": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Girls in Tech gallery frame 2",
+      "replacement": "Replace with a documentary ITFYG frame of young women on a Girls in Tech cohort working at their own machines."
+    },
+    {
+      "route": "/what-we-do/girls-in-tech",
+      "section": "gallery-3",
+      "url": "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Girls in Tech gallery frame 3",
+      "replacement": "Replace with a documentary ITFYG frame of young women on a Girls in Tech cohort working at their own machines."
+    },
+    {
+      "route": "/what-we-do/girls-in-tech",
+      "section": "gallery-4",
+      "url": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Girls in Tech gallery frame 4",
+      "replacement": "Replace with a documentary ITFYG frame of young women on a Girls in Tech cohort working at their own machines."
+    },
+    {
+      "route": "/what-we-do/entrepreneurship-hub",
+      "section": "hero",
+      "url": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "wide",
+      "role": "Entrepreneurship Hub hero photograph",
+      "replacement": "Replace with a wide ITFYG frame of Entrepreneurship Hub founders testing an idea with a mentor."
+    },
+    {
+      "route": "/what-we-do/entrepreneurship-hub",
+      "section": "overview",
+      "url": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "Entrepreneurship Hub overview photograph",
+      "replacement": "Replace with an ITFYG frame showing Entrepreneurship Hub founders testing an idea with a mentor in closer detail."
+    },
+    {
+      "route": "/what-we-do/entrepreneurship-hub",
+      "section": "gallery-1",
+      "url": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Entrepreneurship Hub gallery frame 1",
+      "replacement": "Replace with a documentary ITFYG frame of Entrepreneurship Hub founders testing an idea with a mentor."
+    },
+    {
+      "route": "/what-we-do/entrepreneurship-hub",
+      "section": "gallery-2",
+      "url": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Entrepreneurship Hub gallery frame 2",
+      "replacement": "Replace with a documentary ITFYG frame of Entrepreneurship Hub founders testing an idea with a mentor."
+    },
+    {
+      "route": "/what-we-do/entrepreneurship-hub",
+      "section": "gallery-3",
+      "url": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Entrepreneurship Hub gallery frame 3",
+      "replacement": "Replace with a documentary ITFYG frame of Entrepreneurship Hub founders testing an idea with a mentor."
+    },
+    {
+      "route": "/what-we-do/entrepreneurship-hub",
+      "section": "gallery-4",
+      "url": "https://images.unsplash.com/photo-1553484771-047a44eee27b?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Entrepreneurship Hub gallery frame 4",
+      "replacement": "Replace with a documentary ITFYG frame of Entrepreneurship Hub founders testing an idea with a mentor."
+    },
+    {
+      "route": "/what-we-do/code-impact-challenge",
+      "section": "hero",
+      "url": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "wide",
+      "role": "Code Impact Challenge hero photograph",
+      "replacement": "Replace with a wide ITFYG frame of a Code Impact Challenge team building and presenting under time pressure."
+    },
+    {
+      "route": "/what-we-do/code-impact-challenge",
+      "section": "overview",
+      "url": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "Code Impact Challenge overview photograph",
+      "replacement": "Replace with an ITFYG frame showing a Code Impact Challenge team building and presenting under time pressure in closer detail."
+    },
+    {
+      "route": "/what-we-do/code-impact-challenge",
+      "section": "gallery-1",
+      "url": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Code Impact Challenge gallery frame 1",
+      "replacement": "Replace with a documentary ITFYG frame of a Code Impact Challenge team building and presenting under time pressure."
+    },
+    {
+      "route": "/what-we-do/code-impact-challenge",
+      "section": "gallery-2",
+      "url": "https://images.unsplash.com/photo-1528901166007-3784c7dd3653?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Code Impact Challenge gallery frame 2",
+      "replacement": "Replace with a documentary ITFYG frame of a Code Impact Challenge team building and presenting under time pressure."
+    },
+    {
+      "route": "/what-we-do/code-impact-challenge",
+      "section": "gallery-3",
+      "url": "https://images.unsplash.com/photo-1526253038957-bce54e05968e?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Code Impact Challenge gallery frame 3",
+      "replacement": "Replace with a documentary ITFYG frame of a Code Impact Challenge team building and presenting under time pressure."
+    },
+    {
+      "route": "/what-we-do/code-impact-challenge",
+      "section": "gallery-4",
+      "url": "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Code Impact Challenge gallery frame 4",
+      "replacement": "Replace with a documentary ITFYG frame of a Code Impact Challenge team building and presenting under time pressure."
+    },
+    {
+      "route": "/what-we-do/rural-tech-connect",
+      "section": "hero",
+      "url": "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "wide",
+      "role": "Rural Tech Connect hero photograph",
+      "replacement": "Replace with a wide ITFYG frame of a Rural Tech Connect session running in a partner community outside Accra."
+    },
+    {
+      "route": "/what-we-do/rural-tech-connect",
+      "section": "overview",
+      "url": "https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "Rural Tech Connect overview photograph",
+      "replacement": "Replace with an ITFYG frame showing a Rural Tech Connect session running in a partner community outside Accra in closer detail."
+    },
+    {
+      "route": "/what-we-do/rural-tech-connect",
+      "section": "gallery-1",
+      "url": "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Rural Tech Connect gallery frame 1",
+      "replacement": "Replace with a documentary ITFYG frame of a Rural Tech Connect session running in a partner community outside Accra."
+    },
+    {
+      "route": "/what-we-do/rural-tech-connect",
+      "section": "gallery-2",
+      "url": "https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Rural Tech Connect gallery frame 2",
+      "replacement": "Replace with a documentary ITFYG frame of a Rural Tech Connect session running in a partner community outside Accra."
+    },
+    {
+      "route": "/what-we-do/rural-tech-connect",
+      "section": "gallery-3",
+      "url": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Rural Tech Connect gallery frame 3",
+      "replacement": "Replace with a documentary ITFYG frame of a Rural Tech Connect session running in a partner community outside Accra."
+    },
+    {
+      "route": "/what-we-do/rural-tech-connect",
+      "section": "gallery-4",
+      "url": "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Rural Tech Connect gallery frame 4",
+      "replacement": "Replace with a documentary ITFYG frame of a Rural Tech Connect session running in a partner community outside Accra."
+    },
+    {
+      "route": "/what-we-do/community-outreach",
+      "section": "hero",
+      "url": "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "wide",
+      "role": "Community Outreach hero photograph",
+      "replacement": "Replace with a wide ITFYG frame of an ITFYG outreach activation meeting young people where they already are."
+    },
+    {
+      "route": "/what-we-do/community-outreach",
+      "section": "overview",
+      "url": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "Community Outreach overview photograph",
+      "replacement": "Replace with an ITFYG frame showing an ITFYG outreach activation meeting young people where they already are in closer detail."
+    },
+    {
+      "route": "/what-we-do/community-outreach",
+      "section": "gallery-1",
+      "url": "https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Community Outreach gallery frame 1",
+      "replacement": "Replace with a documentary ITFYG frame of an ITFYG outreach activation meeting young people where they already are."
+    },
+    {
+      "route": "/what-we-do/community-outreach",
+      "section": "gallery-2",
+      "url": "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Community Outreach gallery frame 2",
+      "replacement": "Replace with a documentary ITFYG frame of an ITFYG outreach activation meeting young people where they already are."
+    },
+    {
+      "route": "/what-we-do/community-outreach",
+      "section": "gallery-3",
+      "url": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Community Outreach gallery frame 3",
+      "replacement": "Replace with a documentary ITFYG frame of an ITFYG outreach activation meeting young people where they already are."
+    },
+    {
+      "route": "/what-we-do/community-outreach",
+      "section": "gallery-4",
+      "url": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Community Outreach gallery frame 4",
+      "replacement": "Replace with a documentary ITFYG frame of an ITFYG outreach activation meeting young people where they already are."
+    },
+    {
+      "route": "/what-we-do/advocacy",
+      "section": "hero",
+      "url": "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "wide",
+      "role": "Advocacy hero photograph",
+      "replacement": "Replace with a wide ITFYG frame of ITFYG representatives in an institutional or policy setting on behalf of the work."
+    },
+    {
+      "route": "/what-we-do/advocacy",
+      "section": "overview",
+      "url": "https://images.unsplash.com/photo-1553484771-047a44eee27b?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "Advocacy overview photograph",
+      "replacement": "Replace with an ITFYG frame showing ITFYG representatives in an institutional or policy setting on behalf of the work in closer detail."
+    },
+    {
+      "route": "/what-we-do/advocacy",
+      "section": "gallery-1",
+      "url": "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Advocacy gallery frame 1",
+      "replacement": "Replace with a documentary ITFYG frame of ITFYG representatives in an institutional or policy setting on behalf of the work."
+    },
+    {
+      "route": "/what-we-do/advocacy",
+      "section": "gallery-2",
+      "url": "https://images.unsplash.com/photo-1553484771-047a44eee27b?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Advocacy gallery frame 2",
+      "replacement": "Replace with a documentary ITFYG frame of ITFYG representatives in an institutional or policy setting on behalf of the work."
+    },
+    {
+      "route": "/what-we-do/advocacy",
+      "section": "gallery-3",
+      "url": "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Advocacy gallery frame 3",
+      "replacement": "Replace with a documentary ITFYG frame of ITFYG representatives in an institutional or policy setting on behalf of the work."
+    },
+    {
+      "route": "/what-we-do/advocacy",
+      "section": "gallery-4",
+      "url": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Advocacy gallery frame 4",
+      "replacement": "Replace with a documentary ITFYG frame of ITFYG representatives in an institutional or policy setting on behalf of the work."
+    },
+    {
+      "route": "/what-we-do/tech-clubs",
+      "section": "hero",
+      "url": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "wide",
+      "role": "Tech Clubs hero photograph",
+      "replacement": "Replace with a wide ITFYG frame of a weekly school Tech Club session with its regular members."
+    },
+    {
+      "route": "/what-we-do/tech-clubs",
+      "section": "overview",
+      "url": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "Tech Clubs overview photograph",
+      "replacement": "Replace with an ITFYG frame showing a weekly school Tech Club session with its regular members in closer detail."
+    },
+    {
+      "route": "/what-we-do/tech-clubs",
+      "section": "gallery-1",
+      "url": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Tech Clubs gallery frame 1",
+      "replacement": "Replace with a documentary ITFYG frame of a weekly school Tech Club session with its regular members."
+    },
+    {
+      "route": "/what-we-do/tech-clubs",
+      "section": "gallery-2",
+      "url": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Tech Clubs gallery frame 2",
+      "replacement": "Replace with a documentary ITFYG frame of a weekly school Tech Club session with its regular members."
+    },
+    {
+      "route": "/what-we-do/tech-clubs",
+      "section": "gallery-3",
+      "url": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Tech Clubs gallery frame 3",
+      "replacement": "Replace with a documentary ITFYG frame of a weekly school Tech Club session with its regular members."
+    },
+    {
+      "route": "/what-we-do/tech-clubs",
+      "section": "gallery-4",
+      "url": "https://images.unsplash.com/photo-1620829813573-7c9e1877706f?auto=format&fit=crop&w=1400&q=85",
+      "orientation": "landscape",
+      "role": "Tech Clubs gallery frame 4",
+      "replacement": "Replace with a documentary ITFYG frame of a weekly school Tech Club session with its regular members."
+    },
+    {
+      "route": "/what-we-do",
+      "section": "hero",
+      "url": "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "wide",
+      "role": "What We Do hero photograph",
+      "replacement": "Replace with a wide ITFYG frame that reads as the whole programme portfolio at once."
+    },
+    {
+      "route": "/what-we-do",
+      "section": "filmstrip-1",
+      "url": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "In-action frame: Peer learning",
+      "replacement": "Replace with an ITFYG frame of learners working a problem out together without a facilitator standing over them."
+    },
+    {
+      "route": "/what-we-do",
+      "section": "filmstrip-2",
+      "url": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "In-action frame: Mentorship",
+      "replacement": "Replace with an ITFYG frame of an ITFYG mentor and a learner reviewing work side by side."
+    },
+    {
+      "route": "/what-we-do",
+      "section": "filmstrip-3",
+      "url": "https://images.unsplash.com/photo-1528901166007-3784c7dd3653?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "In-action frame: Building in teams",
+      "replacement": "Replace with an ITFYG frame of an ITFYG team splitting a build between them at their machines."
+    },
+    {
+      "route": "/what-we-do",
+      "section": "filmstrip-4",
+      "url": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "In-action frame: Facilitated practice",
+      "replacement": "Replace with an ITFYG frame of an ITFYG facilitator holding a room through a practical exercise."
+    },
+    {
+      "route": "*",
+      "section": "editorial-media/classroom",
+      "url": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "shared classroom frame",
+      "replacement": "Replace with an ITFYG photograph of learners working together in an ITFYG session."
+    },
+    {
+      "route": "*",
+      "section": "editorial-media/facilitator",
+      "url": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "shared mentoring frame",
+      "replacement": "Replace with an ITFYG photograph of an ITFYG facilitator working through a problem with one learner."
+    },
+    {
+      "route": "*",
+      "section": "editorial-media/girls",
+      "url": "https://images.unsplash.com/photo-1744809495173-217ca4faa8bc?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "portrait",
+      "role": "shared young-women frame",
+      "replacement": "Replace with an ITFYG photograph of a young woman on an ITFYG cohort at work."
+    },
+    {
+      "route": "*",
+      "section": "editorial-media/graduation",
+      "url": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "shared cohort-completion frame",
+      "replacement": "Replace with an ITFYG photograph of an ITFYG cohort together at the end of a programme."
+    },
+    {
+      "route": "*",
+      "section": "editorial-media/speaker",
+      "url": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "shared session-leading frame",
+      "replacement": "Replace with an ITFYG photograph of an ITFYG facilitator leading a room."
+    },
+    {
+      "route": "*",
+      "section": "editorial-media/learners",
+      "url": "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "shared practical-session frame",
+      "replacement": "Replace with an ITFYG photograph of an ITFYG practical session in progress."
+    },
+    {
+      "route": "*",
+      "section": "editorial-media/presentation",
+      "url": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "shared team-discussion frame",
+      "replacement": "Replace with an ITFYG photograph of an ITFYG team or cohort working through a discussion."
+    },
+    {
+      "route": "*",
+      "section": "editorial-media/community",
+      "url": "https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=1600&q=85",
+      "orientation": "landscape",
+      "role": "shared community frame",
+      "replacement": "Replace with an ITFYG photograph of an ITFYG community session in a partner location."
+    },
+    {
+      "route": "*",
+      "section": "editorial-media/belief",
+      "url": "https://images.unsplash.com/photo-1620829813573-7c9e1877706f?auto=format&fit=crop&w=1200&q=85",
+      "orientation": "portrait",
+      "role": "Who We Are belief-statement portrait",
+      "replacement": "Replace with an ITFYG photograph of a portrait of one ITFYG learner that can carry a statement of belief beside it."
+    }
+  ]
+}

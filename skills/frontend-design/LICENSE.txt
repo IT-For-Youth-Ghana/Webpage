@@ -1,0 +1,5 @@
+Frontend Design Skill License
+
+The complete license terms for the `frontend-design` skill will be supplied by the repository owner or legal representative. Until replaced, this placeholder grants no rights beyond reading within this repository.
+
+Suggested next action: Replace this file with your preferred license text (e.g., MIT, Apache-2.0, or a custom internal license) and update any references as needed.

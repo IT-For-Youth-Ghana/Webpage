@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "targets": {
+    "hero-capsule": {
+      "targetKind": "existing-ui",
+      "projectId": "ed233d8b-f2bb-47df-aa4d-6c2962eadad0",
+      "baselineDraftId": "3e83fb7d-8887-4d90-abf8-12fcddbcc454",
+      "activeDraftId": "3e83fb7d-8887-4d90-abf8-12fcddbcc454",
+      "designSystemPath": ".superdesign/design-system.md",
+      "referenceIds": [
+        "9a511e67-5f7f-43de-8a8a-a2e365a1a777"
+      ],
+      "contextFiles": [
+        ".superdesign/design-system.md",
+        "components/home/hero-capsule-slideshow.tsx",
+        "components/capsule/capsule-shell.tsx",
+        "components/capsule/capsule-ground.tsx",
+        "components/capsule/capsule-media.tsx",
+        "components/capsule/capsule-content.tsx",
+        "components/capsule/capsule-actions.tsx",
+        "components/capsule/slideshow-controls.tsx",
+        "components/capsule/slideshow-stage.tsx",
+        "app/globals.css:250:704",
+        "lib/utils/cn.ts"
+      ],
+      "fingerprints": {
+        ".superdesign/design-system.md": "cc48c96cc01f061e1a7f8cdd55a10b85f3fe41332d9a3ae1d82c42444ee24f09",
+        "components/home/hero-capsule-slideshow.tsx": "3aef0e9c9999e5ec92bead6d40b4649d3260102c79fe7d7896d82a4423178c98",
+        "components/capsule/capsule-shell.tsx": "08711737ff8404aa188ed744137bda51f999b7caad94f3b1ce1a435bc5866365",
+        "components/capsule/capsule-ground.tsx": "72602b33a1294e9a7eb5edaff8dcc79ead8b16f1b37a856845b6cbff0660291d",
+        "components/capsule/capsule-media.tsx": "d1df87b16e023fd31505f33930dd1d38df088c1da14121e57acbb7afa5b85b49",
+        "components/capsule/capsule-content.tsx": "1be9393d57769ad0f5ef7ce028e97b4be4c392a5c287697f9c71bfd6e25985a0",
+        "components/capsule/capsule-actions.tsx": "d686bf0829b576c38cace0acbe4dee6326a4ce86043015e8dc1583050f2f7906",
+        "components/capsule/slideshow-controls.tsx": "ed07d843eb891fb19f7625ba0a0d881deb6e6cba673424a89ab61be55e6319b1",
+        "components/capsule/slideshow-stage.tsx": "a11c90999fd154486f95be614c8c94566c7dfa0c232a7a68a59b622af03f7250",
+        "app/globals.css": "4e3a71800ab36db2ad3c63eeede93f176006ff7e118612f68f9bb6a8f6eec9b0",
+        "lib/utils/cn.ts": "14fb2f175bc4163670d3c29d81916c358e18b6b20a793e9b851428cf9aa9fb2c"
+      },
+      "components": [],
+      "drafts": {
+        "3e83fb7d-8887-4d90-abf8-12fcddbcc454": {
+          "title": "IT For Youth Ghana Contained Hero Capsule",
+          "visualDirection": "approved hand sketch: contained circular media and capsule-owned blur",
+          "currentVersion": 2
+        }
+      },
+      "updatedAt": "2026-08-25T13:46:41+00:00"
+    }
+  }
+}

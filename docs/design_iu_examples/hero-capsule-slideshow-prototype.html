@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ITFYG — Hero capsule slideshow prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+/* ==========================================================================
+   ITFYG HERO CAPSULE SLIDESHOW — DESIGN PROTOTYPE
+   --------------------------------------------------------------------------
+   Palette and type are taken verbatim from app/globals.css and
+   tailwind.config.ts. No invented colours, no invented typefaces.
+
+   Class prefixes map 1:1 onto the React components this ports to:
+     .stage      -> SlideshowStage
+     .capsule    -> CapsuleShell
+     .capsule__media / .lens -> CapsuleMedia
+     .capsule__content       -> CapsuleContent
+     .actions    -> CapsuleActions
+     .controls   -> SlideshowControls   (driven by headless SlideshowController)
+   ========================================================================== */
+
+:root{
+  /* Verified tokens — app/globals.css */
+  --color-primary:#1E72BA;
+  --color-primary-dark:#0152BE;
+  --color-primary-light:#E8F1FA;
+  --color-accent:#D70B52;
+  --color-accent-dark:#B00944;
+  --color-text:#1A1A1A;
+  --color-text-muted:#5C6672;
+  --color-bg:#FFFFFF;
+  --color-bg-alt:#F7F9FC;
+  --color-border:#D8E5F2;
+  --color-on-dark-muted:rgba(255,255,255,0.82);
+
+  /* Verified tokens — tailwind.config.ts brand.* */
+  --brand-navy:#142850;
+  --brand-warm:#FBE7EF;
+
+  --font-heading:Georgia,Cambria,"Times New Roman",serif;
+  --font-body:"Inter",system-ui,sans-serif;
+
+  /* PROPOSED radius scale — see the decision note in the page footer.
+     Controls stay restrained; media/panel/capsule become three named steps
+     so the ad-hoc rounded-[32px] / rounded-[2rem] values get a home. */
+  --radius-control:0.375rem;
+  --radius-media:0.75rem;
+  --radius-panel:1.5rem;
+  --radius-capsule:999px;
+
+  /* Per-slide identity, rewritten by the controller. Mirrors the existing
+     HeroSlide.overlayFrom / overlayTo contract exactly. */
+  --slide-from:rgba(10,15,40,0.88);
+  --slide-to:rgba(10,15,40,0.35);
+  --slide-accent:#1E72BA;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--color-bg);
+  color:var(--color-text);
+  font-family:var(--font-body);
+  font-size:1.0625rem;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{
+  font-family:var(--font-heading);
+  font-weight:700;
+  letter-spacing:-0.025em;
+  line-height:1.08;
+  margin:0;
+}
+img{max-width:100%;display:block;}
+button{font:inherit;color:inherit;}
+
+.skip-link{
+  position:absolute;left:-9999px;top:0;z-index:100;
+  background:#fff;color:var(--color-accent);
+  padding:12px 20px;font-weight:700;text-decoration:none;
+  border-radius:0 0 var(--radius-control) 0;
+}
+.skip-link:focus{left:0;}
+
+/* Stand-in for the real sticky SiteHeader (#030b18, z-40). Present only so the
+   capsule is judged against the header it actually sits beneath. */
+.mock-header{
+  position:sticky;top:0;z-index:40;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:24px;padding:14px clamp(16px,4vw,48px);
+  background:rgba(3,11,24,0.95);
+  border-bottom:1px solid rgba(255,255,255,0.12);
+  backdrop-filter:blur(16px);
+}
+.mock-header__mark{
+  font-family:var(--font-heading);font-size:16px;font-weight:700;
+  color:#fff;letter-spacing:-0.02em;
+}
+.mock-header__nav{display:none;gap:26px;font-size:14px;font-weight:500;color:rgba(255,255,255,0.72);}
+.mock-header__nav span{white-space:nowrap;}
+@media (min-width:900px){.mock-header__nav{display:flex;}}
+
+/* ==========================================================================
+   STAGE  ->  SlideshowStage
+   The blurred per-slide duplicate is KEPT from the current implementation.
+   In the old two-box layout it existed to fill the dead space left by
+   object-contain. Here it does more work: it becomes the atmospheric backdrop
+   the capsule floats on, and it is the layer that still shows the FULL,
+   uncropped frame of every photograph.
+   ========================================================================== */
+.stage{
+  position:relative;
+  min-height:100svh;
+  display:grid;
+  place-items:center;
+  padding:clamp(32px,6vh,72px) clamp(16px,4vw,56px) clamp(72px,10vh,110px);
+  overflow:hidden;
+  background:#05070f;
+  isolation:isolate;
+}
+.stage__backdrop{position:absolute;inset:0;z-index:0;}
+.stage__layer{
+  position:absolute;inset:0;
+  opacity:0;
+  transition:opacity 1s ease-out;
+}
+.stage__layer.is-active{opacity:1;}
+.stage__layer img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  opacity:0.5;
+  filter:blur(58px);
+  transform:scale(1.18);
+  transition:transform 10s ease-out;
+}
+.stage__layer.is-active img{transform:scale(1.06);}
+/* Per-slide wash. Carries the slide's identity across the whole stage, not
+   just the text panel, so the capsule and its ground read as one scene. */
+.stage__wash{
+  position:absolute;inset:0;z-index:1;
+  background:
+    radial-gradient(ellipse at 22% 42%, transparent 0%, rgba(3,6,14,0.72) 72%),
+    linear-gradient(145deg,var(--slide-from) 0%,var(--slide-to) 46%,rgba(3,6,14,0.97) 100%);
+  transition:background 900ms ease-out;
+}
+.stage__grain{
+  position:absolute;inset:0;z-index:2;opacity:0.022;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.1) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.1) 1px,transparent 1px);
+  background-size:50px 50px;
+}
+.stage__bloom{
+  position:absolute;z-index:2;pointer-events:none;
+  border-radius:50%;filter:blur(120px);
+}
+.stage__bloom--accent{
+  left:-140px;top:16%;width:420px;height:420px;
+  background:var(--slide-accent);opacity:0.16;
+  animation:bloom-drift 9s ease-in-out infinite;
+  transition:background 900ms ease-out;
+}
+.stage__bloom--cool{
+  right:-120px;bottom:12%;width:340px;height:340px;
+  background:#fff;opacity:0.05;
+  animation:bloom-drift-reverse 11s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   CAPSULE  ->  CapsuleShell
+   One continuous stadium silhouette. The photograph is not placed INSIDE the
+   shell, it IS the shell's left lobe: circle radius and the stadium's left
+   arc radius are both (capsule height / 2), so the two arcs coincide exactly
+   and the outline has no seam anywhere along it.
+   ========================================================================== */
+.capsule{
+  position:relative;z-index:3;
+  width:100%;max-width:1180px;
+  min-height:var(--capsule-h,460px);
+  display:flex;align-items:stretch;
+  /* The left end's arc radius is derived from the lens size, NOT from the box
+     height, so the two arcs stay coincident even if CMS copy pushes the
+     capsule taller than --capsule-h. In that case the left end degrades to a
+     rounded end whose corner radius still matches the lens, rather than
+     silently desynchronising. The right end stays a true round cap. */
+  /* Trailing corners take the panel radius, NOT 999px. When the radii on any
+     edge sum to more than that edge, CSS scales EVERY radius by one global
+     factor; 999px here drove that factor to 0.23, shrinking the leading corners
+     to ~53px and rounding the trailing end instead, so the shape came out
+     mirrored. */
+  border-radius:
+    calc(var(--capsule-h,460px) / 2)
+    var(--radius-panel)
+    var(--radius-panel)
+    calc(var(--capsule-h,460px) / 2);
+  background:
+    linear-gradient(118deg,
+      rgba(255,255,255,0.10) 0%,
+      rgba(255,255,255,0.045) 42%,
+      rgba(255,255,255,0.02) 100%);
+  border:1px solid rgba(255,255,255,0.14);
+  box-shadow:
+    0 48px 110px -34px rgba(0,0,0,0.78),
+    inset 0 1px 0 rgba(255,255,255,0.10);
+  backdrop-filter:blur(26px) saturate(125%);
+  -webkit-backdrop-filter:blur(26px) saturate(125%);
+  animation:capsule-in 1s cubic-bezier(.16,.84,.44,1) 0.1s both;
+}
+
+/* --- CapsuleMedia -------------------------------------------------------- */
+.capsule__media{
+  position:relative;flex:0 0 auto;
+  width:var(--capsule-h,460px);
+  height:var(--capsule-h,460px);
+  /* Centred rather than stretched: a stretched lens would stop being square
+     the moment the capsule grew, breaking the circle. */
+  align-self:center;
+}
+.lens{
+  position:absolute;inset:0;
+  border-radius:50%;
+  overflow:hidden;
+}
+.lens__frame{
+  position:absolute;inset:0;
+  border-radius:50%;
+  overflow:hidden;
+  /* THE INVISIBLE JOIN. The photograph dissolves across its own right flank
+     into the capsule body, so the eye reads one object rather than a circle
+     sitting next to a panel. Works over any backdrop because it is a mask,
+     not a colour-matched overlay. */
+  -webkit-mask-image:linear-gradient(100deg,#000 0%,#000 52%,rgba(0,0,0,0.55) 76%,transparent 96%);
+          mask-image:linear-gradient(100deg,#000 0%,#000 52%,rgba(0,0,0,0.55) 76%,transparent 96%);
+}
+.lens__shot{
+  position:absolute;inset:0;
+  opacity:0;
+  transition:opacity 900ms ease-out;
+}
+.lens__shot.is-active{opacity:1;}
+.lens__shot img{
+  width:100%;height:100%;
+  /* Circular crop is deliberate portraiture, not a failed fit. The complete
+     uncropped frame is still visible on .stage__layer behind the capsule. */
+  object-fit:cover;
+  object-position:50% 34%;
+  transform:scale(1.05);
+  transition:transform 10s ease-out;
+}
+.lens__shot.is-active img{transform:scale(1);}
+.lens__veil{
+  position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,0.16) 0%,transparent 38%,rgba(0,0,0,0.22) 100%);
+}
+/* Slide-accent rim. Per-slide identity without moving any geometry. */
+.lens__rim{
+  position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,0.22);
+}
+
+/* Autoplay progress as a stroke travelling the rim of the lens. Replaces the
+   3px bar pinned to the bottom of the viewport: same information, but it now
+   belongs to the capsule instead of floating away from it. */
+.lens__progress{
+  position:absolute;inset:-10px;
+  width:calc(100% + 20px);height:calc(100% + 20px);
+  transform:rotate(-90deg);
+  pointer-events:none;overflow:visible;
+}
+.lens__progress-track{fill:none;stroke:rgba(255,255,255,0.14);stroke-width:1;}
+/* Literal hex on SVG presentation attributes is set in markup, never var(). */
+.lens__progress-value{fill:none;stroke-width:1.6;stroke-linecap:round;transition:stroke 900ms ease-out;}
+
+.capsule__tag{
+  position:absolute;z-index:4;left:50%;bottom:5%;
+  transform:translateX(-50%);
+  max-width:82%;
+  padding:6px 15px;
+  border-radius:var(--radius-capsule);
+  background:rgba(3,6,14,0.58);
+  border:1px solid rgba(255,255,255,0.16);
+  backdrop-filter:blur(10px);
+  color:#fff;font-size:11.5px;font-weight:600;
+  letter-spacing:0.09em;text-transform:uppercase;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  text-align:center;
+}
+
+/* --- CapsuleContent ------------------------------------------------------ */
+.capsule__content{
+  flex:1 1 auto;min-width:0;
+  display:flex;flex-direction:column;justify-content:center;
+  /* Negative left pull closes the optical gap the mask fade opens up. */
+  margin-left:clamp(-88px,-5vw,-40px);
+  padding:clamp(36px,4.4vw,58px) clamp(40px,5vw,72px) clamp(36px,4.4vw,58px) 0;
+}
+.capsule__eyebrow{
+  display:flex;align-items:center;gap:12px;
+  font-size:11.5px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;
+  color:#fff;
+}
+.capsule__eyebrow::before{
+  content:"";width:26px;height:2px;flex:0 0 auto;
+  background:var(--slide-accent);
+  transition:background 900ms ease-out;
+}
+.capsule__heading{
+  margin-top:18px;
+  font-size:clamp(2rem,3.5vw,3.35rem);
+  color:#fff;
+  text-wrap:balance;
+}
+/* splitHeading() is KEPT. In the capsule it earns a second job: the trailing
+   clause drops to a lighter tone, giving the serif headline an editorial
+   two-beat read instead of one undifferentiated block. */
+.capsule__heading-tail{display:block;color:rgba(255,255,255,0.62);}
+.capsule__body{
+  margin:20px 0 0;
+  max-width:56ch;
+  font-size:1rem;line-height:1.72;
+  color:var(--color-on-dark-muted);
+}
+
+/* --- CapsuleActions ------------------------------------------------------ */
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px;}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 24px;
+  border-radius:var(--radius-control);
+  border:1.5px solid transparent;
+  font-size:0.9375rem;font-weight:700;
+  text-decoration:none;cursor:pointer;
+  transition:transform .2s ease,background-color .2s ease,border-color .2s ease,box-shadow .2s ease,color .2s ease;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.28);}
+.btn:focus-visible{outline:none;box-shadow:0 0 0 2px #05070f,0 0 0 4px #fff;}
+/* Maps to Button variant="solid-pink" — the accent is #D70B52. */
+.btn--accent{background:var(--color-accent);border-color:var(--color-accent);color:#fff;}
+.btn--accent:hover{background:var(--color-accent-dark);border-color:var(--color-accent-dark);}
+/* Maps to Button variant="white-outline". */
+.btn--ghost{background:transparent;border-color:rgba(255,255,255,0.5);color:#fff;}
+.btn--ghost:hover{border-color:#fff;background:rgba(255,255,255,0.1);}
+.btn__arrow{
+  width:6px;height:6px;flex:0 0 auto;
+  border-top:1.6px solid currentColor;border-right:1.6px solid currentColor;
+  transform:rotate(45deg);
+}
+
+/* ==========================================================================
+   CONTROLS  ->  SlideshowControls
+   Every control is a real focusable button with an accessible name. Chevrons
+   are CSS-drawn geometry, not icon components: no lucide, no emoji.
+   ========================================================================== */
+.controls{
+  position:absolute;z-index:4;left:0;right:0;
+  bottom:clamp(22px,4.5vh,44px);
+  display:flex;align-items:center;justify-content:center;
+  gap:clamp(12px,2vw,22px);
+  padding:0 clamp(16px,4vw,56px);
+}
+.ctrl{
+  display:inline-flex;align-items:center;justify-content:center;
+  flex:0 0 auto;
+  width:44px;height:44px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,0.24);
+  background:rgba(3,6,14,0.42);
+  color:#fff;cursor:pointer;
+  backdrop-filter:blur(14px);
+  transition:transform .25s ease,background-color .25s ease,border-color .25s ease;
+}
+.ctrl:hover{transform:scale(1.08);background:rgba(3,6,14,0.68);border-color:rgba(255,255,255,0.46);}
+.ctrl:focus-visible{outline:none;box-shadow:0 0 0 2px #05070f,0 0 0 4px #fff;}
+.ctrl__chev{
+  width:8px;height:8px;
+  border-top:1.7px solid currentColor;border-right:1.7px solid currentColor;
+}
+.ctrl__chev--prev{transform:rotate(-135deg) translate(-1px,-1px);}
+.ctrl__chev--next{transform:rotate(45deg) translate(-1px,-1px);}
+/* Pause / play as pure geometry. WCAG 2.2.2: autoplay needs a keyboard-
+   reachable stop, which hover-to-pause alone never provided. */
+.ctrl__pause{display:flex;gap:3px;}
+.ctrl__pause i{display:block;width:2.5px;height:11px;background:currentColor;}
+.ctrl__play{
+  width:0;height:0;
+  border-left:9px solid currentColor;
+  border-top:6px solid transparent;border-bottom:6px solid transparent;
+  margin-left:3px;
+}
+
+.pager{
+  display:flex;align-items:center;gap:14px;
+  padding:9px 18px;
+  border-radius:var(--radius-capsule);
+  border:1px solid rgba(255,255,255,0.18);
+  background:rgba(3,6,14,0.42);
+  backdrop-filter:blur(14px);
+}
+.pager__count{
+  font-family:var(--font-heading);
+  font-size:13px;font-weight:700;letter-spacing:0.06em;
+  color:#fff;white-space:nowrap;
+}
+.pager__count em{font-style:normal;color:rgba(255,255,255,0.5);}
+.pager__bars{display:flex;align-items:center;gap:7px;}
+.pager__bar{
+  width:26px;height:3px;padding:0;
+  border:none;border-radius:var(--radius-capsule);
+  background:rgba(255,255,255,0.26);
+  cursor:pointer;
+  transition:background-color .3s ease,width .3s ease;
+}
+.pager__bar:hover{background:rgba(255,255,255,0.55);}
+.pager__bar:focus-visible{outline:none;box-shadow:0 0 0 2px #05070f,0 0 0 3px #fff;}
+.pager__bar[aria-current="true"]{width:40px;background:var(--slide-accent);}
+
+/* Scroll cue — a thin travelling rule, replacing the ArrowDown icon. */
+.scroll-cue{
+  position:absolute;z-index:4;
+  left:50%;transform:translateX(-50%);
+  bottom:0;
+  display:none;
+  flex-direction:column;align-items:center;gap:9px;
+  padding:0 0 10px;
+  background:none;border:none;cursor:pointer;
+  font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;
+  color:rgba(255,255,255,0.55);
+}
+@media (min-width:1100px){.scroll-cue{display:flex;}}
+.scroll-cue:hover{color:#fff;}
+.scroll-cue:focus-visible{outline:none;color:#fff;}
+.scroll-cue__rule{position:relative;width:1px;height:44px;background:rgba(255,255,255,0.2);overflow:hidden;}
+.scroll-cue__rule::after{
+  content:"";position:absolute;left:0;top:0;width:1px;height:16px;
+  background:#fff;animation:cue-fall 2.1s ease-in-out infinite;
+}
+
+/* Visually-hidden live region: announces the slide without duplicating the
+   heading for sighted users. */
+.sr-only{
+  position:absolute!important;width:1px;height:1px;
+  padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+
+@keyframes capsule-in{from{opacity:0;transform:translateX(-40px) scale(0.975);}to{opacity:1;transform:none;}}
+@keyframes bloom-drift{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(24px,-22px) scale(1.06);}}
+@keyframes bloom-drift-reverse{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-22px,20px) scale(1.06);}}
+@keyframes cue-fall{0%{transform:translateY(-18px);opacity:0;}45%{opacity:1;}100%{transform:translateY(44px);opacity:0;}}
+
+/* ==========================================================================
+   RESPONSIVE
+   Below 820px the capsule stacks and becomes a vertical stadium: the lens is
+   the TOP lobe, arcs still coincident, identity intact. Proximity/pointer
+   flourishes are switched off rather than crammed in.
+   ========================================================================== */
+@media (max-width:1180px){
+  .capsule{--capsule-h:400px;}
+}
+@media (max-width:1000px){
+  .capsule{--capsule-h:340px;}
+  .capsule__heading{font-size:clamp(1.75rem,3.6vw,2.5rem);}
+}
+@media (max-width:820px){
+  .stage{padding:clamp(24px,5vh,40px) 16px 104px;}
+  .capsule{
+    flex-direction:column;
+    max-width:440px;
+    min-height:0;
+    /* Stacked: the lens is the TOP lobe at full capsule width. Two 999px top
+       radii overflow the width, so CSS scales both to exactly width/2, which
+       is exactly the lens radius. Coincident at every viewport width. */
+    --capsule-w:min(440px,calc(100vw - 32px));
+    border-radius:calc(var(--capsule-w) / 2) calc(var(--capsule-w) / 2) var(--radius-panel) var(--radius-panel);
+    animation-name:capsule-in-stacked;
+  }
+  .capsule__media{
+    width:100%;
+    height:auto;
+    aspect-ratio:1/1;
+    align-self:auto;
+  }
+  .lens__frame{
+    -webkit-mask-image:linear-gradient(185deg,#000 0%,#000 56%,rgba(0,0,0,0.55) 80%,transparent 98%);
+            mask-image:linear-gradient(185deg,#000 0%,#000 56%,rgba(0,0,0,0.55) 80%,transparent 98%);
+  }
+  .lens__shot img{object-position:50% 30%;}
+  .capsule__content{
+    margin-left:0;
+    margin-top:clamp(-64px,-11vw,-36px);
+    padding:0 26px 34px;
+    text-align:center;
+  }
+  .capsule__eyebrow{justify-content:center;}
+  .capsule__eyebrow::before{display:none;}
+  .capsule__body{margin-left:auto;margin-right:auto;}
+  .actions{justify-content:center;}
+  .capsule__tag{display:none;}
+  .controls{gap:10px;bottom:26px;}
+}
+@keyframes capsule-in-stacked{from{opacity:0;transform:translateY(28px) scale(0.98);}to{opacity:1;transform:none;}}
+
+/* ==========================================================================
+   REDUCED MOTION
+   Resting, fully-visible state. Autoplay does not start at all: an
+   auto-advancing carousel is itself motion, so the honest fallback is manual
+   control only, with the progress ring hidden because nothing is counting.
+   ========================================================================== */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  .capsule,
+  .stage__bloom--accent,
+  .stage__bloom--cool,
+  .scroll-cue__rule::after{animation:none!important;}
+  .capsule{opacity:1;transform:none;}
+  .stage__layer,
+  .stage__layer img,
+  .lens__shot,
+  .lens__shot img,
+  .stage__wash,
+  .pager__bar,
+  .capsule__eyebrow::before,
+  .lens__progress-value{transition:none!important;}
+  .stage__layer img,.lens__shot img{transform:none;}
+  .lens__progress{display:none;}
+  .btn:hover,.ctrl:hover{transform:none;}
+}
+
+/* --------------------------------------------------------------------------
+   Below the fold: decision notes. Prototype scaffolding only, not shipped.
+   -------------------------------------------------------------------------- */
+.notes{max-width:76ch;margin:0 auto;padding:clamp(56px,8vw,96px) clamp(20px,5vw,32px);}
+.notes h2{font-size:clamp(1.9rem,4vw,2.6rem);color:var(--color-text);}
+.notes h3{margin-top:38px;font-size:1.3rem;color:var(--color-text);}
+.notes p{margin:14px 0 0;color:var(--color-text-muted);}
+.notes p strong{color:var(--color-text);}
+.notes__eyebrow{
+  font-size:11.5px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--color-accent);margin:0 0 14px;
+}
+.notes__rule{margin:44px 0 0;border:0;border-top:1px solid var(--color-border);}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#after-hero">Skip to content</a>
+
+<header class="mock-header">
+  <span class="mock-header__mark">IT For Youth Ghana</span>
+  <nav class="mock-header__nav" aria-label="Placeholder navigation">
+    <span>Who We Are</span><span>What We Do</span><span>Apply for Training</span><span>Our Impact</span>
+  </nav>
+</header>
+
+<!-- ==========================================================================
+     HERO  ->  <HeroCapsuleSlideshow slides={slides} interval={6000} />
+     ========================================================================== -->
+<section class="stage" id="hero" aria-roledescription="carousel" aria-label="Hero slideshow">
+
+  <!-- SlideshowStage ---------------------------------------------------- -->
+  <div class="stage__backdrop" aria-hidden="true">
+    <div class="stage__layer is-active" data-stage-layer="0">
+      <img src="../../public/images/randomPictures/maingraduationpic.jpg" alt="" />
+    </div>
+    <div class="stage__layer" data-stage-layer="1">
+      <img src="../../public/images/randomPictures/groupworkstudents.jpg" alt="" />
+    </div>
+    <div class="stage__layer" data-stage-layer="2">
+      <img src="../../public/images/randomPictures/studentsBackcoding.jpg" alt="" />
+    </div>
+    <div class="stage__wash"></div>
+    <div class="stage__grain"></div>
+    <div class="stage__bloom stage__bloom--accent"></div>
+    <div class="stage__bloom stage__bloom--cool"></div>
+  </div>
+
+  <!-- CapsuleShell ------------------------------------------------------ -->
+  <div class="capsule" data-capsule>
+
+    <!-- CapsuleMedia -->
+    <div class="capsule__media">
+      <div class="lens">
+        <div class="lens__frame">
+          <div class="lens__shot is-active" data-lens-shot="0">
+            <img src="../../public/images/randomPictures/maingraduationpic.jpg"
+                 alt="Graduating trainees celebrating at an IT For Youth Ghana ceremony in Accra" />
+          </div>
+          <div class="lens__shot" data-lens-shot="1">
+            <img src="../../public/images/randomPictures/groupworkstudents.jpg"
+                 alt="Trainees working through a practical exercise together during a training session" />
+          </div>
+          <div class="lens__shot" data-lens-shot="2">
+            <img src="../../public/images/randomPictures/studentsBackcoding.jpg"
+                 alt="Participants at their workstations during a coding session" />
+          </div>
+          <div class="lens__veil"></div>
+        </div>
+        <div class="lens__rim"></div>
+      </div>
+      <!-- Literal hex values: CSS custom properties do not resolve inside SVG
+           presentation attributes such as stroke and stop-color. -->
+      <svg class="lens__progress" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <circle class="lens__progress-track" cx="50" cy="50" r="48.6" stroke="#FFFFFF" />
+        <circle class="lens__progress-value" data-progress-ring
+                cx="50" cy="50" r="48.6"
+                stroke="#1E72BA" pathLength="100"
+                stroke-dasharray="100" stroke-dashoffset="100" />
+      </svg>
+      <span class="capsule__tag" data-capsule-tag>Graduation day, Accra</span>
+    </div>
+
+    <!-- CapsuleContent -->
+    <div class="capsule__content">
+      <p class="capsule__eyebrow" data-slide-eyebrow>For young Ghanaians</p>
+      <h1 class="capsule__heading">
+        <span data-slide-heading-lead>Build practical digital skills.</span>
+        <span class="capsule__heading-tail" data-slide-heading-tail>Gain confidence. Shape your future.</span>
+      </h1>
+      <p class="capsule__body" data-slide-body>
+        Cohort-based training in Accra for young people ready to move from curiosity to real digital careers,
+        entrepreneurship, or further study. 3,000+ youth trained. 85% of graduates progress into work, learning,
+        or enterprise within six months.
+      </p>
+
+      <!-- CapsuleActions -->
+      <div class="actions">
+        <a class="btn btn--accent" href="#" data-cta-primary>
+          <span data-cta-primary-label>Apply for Cohort 8</span>
+          <span class="btn__arrow" aria-hidden="true"></span>
+        </a>
+        <a class="btn btn--ghost" href="#" data-cta-secondary>
+          <span data-cta-secondary-label>See who can apply</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SlideshowControls ------------------------------------------------- -->
+  <div class="controls">
+    <button class="ctrl" type="button" data-prev aria-label="Previous slide" aria-controls="hero">
+      <span class="ctrl__chev ctrl__chev--prev" aria-hidden="true"></span>
+    </button>
+
+    <div class="pager">
+      <p class="pager__count"><span data-count-current>01</span><em> / 03</em></p>
+      <div class="pager__bars" role="tablist" aria-label="Choose a slide">
+        <button class="pager__bar" type="button" role="tab" data-goto="0" aria-current="true"  aria-label="Slide 1: for young Ghanaians"></button>
+        <button class="pager__bar" type="button" role="tab" data-goto="1" aria-current="false" aria-label="Slide 2: for partners and supporters"></button>
+        <button class="pager__bar" type="button" role="tab" data-goto="2" aria-current="false" aria-label="Slide 3: for organisations"></button>
+      </div>
+    </div>
+
+    <button class="ctrl" type="button" data-toggle aria-label="Pause slideshow" aria-pressed="false">
+      <span class="ctrl__pause" data-toggle-glyph aria-hidden="true"><i></i><i></i></span>
+    </button>
+
+    <button class="ctrl" type="button" data-next aria-label="Next slide" aria-controls="hero">
+      <span class="ctrl__chev ctrl__chev--next" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <button class="scroll-cue" type="button" data-scroll-cue>
+    <span class="scroll-cue__rule" aria-hidden="true"></span>
+    Scroll
+  </button>
+
+  <p class="sr-only" role="status" aria-live="polite" data-live></p>
+</section>
+
+<!-- ==========================================================================
+     DECISION NOTES
+     ========================================================================== -->
+<div class="notes" id="after-hero">
+  <p class="notes__eyebrow">Prototype notes</p>
+  <h2>Three decisions this prototype settles</h2>
+
+  <h3>1. Advancing a slide keeps the capsule and changes what is inside it</h3>
+  <p>
+    The brief offered three readings: the capsule persists as a stable frame, the whole capsule re-forms on every
+    slide, or the shape morphs between slides. This prototype commits to <strong>the persistent frame</strong>.
+    The deciding constraint is the one the brief names directly, that it has to hold up when somebody clicks
+    through quickly rather than watching the autoplay. A shell that re-forms makes the silhouette strobe under
+    rapid clicking, and a morphing shell gets interrupted mid-transition and parks in intermediate states that
+    were never designed. A stable stadium reads as one physical object, a lens the organisation is seen through,
+    and the photography changes behind it.
+  </p>
+  <p>
+    It also buys real usability. The buttons never move, so a fast clicker never has a CTA slide out from under
+    the cursor, and screen-reader focus is never thrown by a re-mounting container. Per-slide identity is carried
+    instead by things that can change without moving geometry: the stage wash built from the existing
+    <strong>overlayFrom</strong> and <strong>overlayTo</strong> values, the accent bloom, the rule above the
+    eyebrow, the active pager bar, and the progress ring stroke.
+  </p>
+
+  <h3>2. The radius system resolves into four named steps, not one</h3>
+  <p>
+    The tokens said 0.375rem and 0.75rem while components reached for
+    <strong>rounded-[32px]</strong> and <strong>rounded-[2rem]</strong>. Collapsing everything to the small values
+    would make the capsule impossible, since the capsule language is full-round by definition. Collapsing
+    everything upward would round off buttons and inputs that are meant to read as functional.
+  </p>
+  <p>
+    So the scale is split by role and every step gets a name:
+    <strong>--radius-control</strong> at 0.375rem for buttons, inputs and chips,
+    <strong>--radius-media</strong> at 0.75rem for inline editorial images,
+    <strong>--radius-panel</strong> at 1.5rem for cards and panels, which is the home the ad-hoc 2rem and 32px
+    values have been missing, and <strong>--radius-capsule</strong> at 999px for the capsule language itself.
+    Nothing arbitrary survives, and both original intentions are kept.
+  </p>
+
+  <h3>3. What was kept from the working implementation, and what changed</h3>
+  <p>
+    <strong>Kept unchanged:</strong> the CMS-driven slide array, six-second autoplay with a visible progress
+    indicator, pause on hover, left and right arrow key navigation, touch swipe, the per-slide overlay colours,
+    the primary and secondary CTA pair, and the <strong>splitHeading</strong> helper, which in the capsule gets a
+    second job dropping the trailing clause to a lighter tone for a two-beat editorial read.
+  </p>
+  <p>
+    <strong>Kept and repurposed:</strong> the blurred background duplicate. It previously existed to fill dead
+    space left by <strong>object-contain</strong>. Here it becomes the atmospheric stage the capsule floats on,
+    and it is also the layer that still shows every photograph in full. The lens itself crops to a circle with
+    <strong>object-cover</strong>, because a circular crop reads as deliberate portraiture where a contained
+    photograph inside a circle reads as a mistake. Nothing is silently dropped: the complete frame is still on
+    screen, behind the capsule.
+  </p>
+  <p>
+    <strong>Three deliberate additions.</strong> A keyboard-reachable pause control, because hover-to-pause is
+    invisible to keyboard users and autoplay needs a stop under WCAG 2.2.2. Arrow-key handling that ignores
+    events originating in text inputs, so the global listener stops hijacking arrow keys elsewhere on the page.
+    And autoplay that never starts under <strong>prefers-reduced-motion</strong>, since an auto-advancing
+    carousel is itself the motion being opted out of, leaving manual controls and a fully visible resting state.
+  </p>
+  <p>
+    <strong>No icon components anywhere.</strong> Chevrons, the pause and play glyphs, the CTA arrow and the
+    scroll cue are all CSS geometry. No lucide imports, no emoji.
+  </p>
+
+  <hr class="notes__rule" />
+  <p>
+    Palette, type and slide copy are taken verbatim from <strong>app/globals.css</strong>,
+    <strong>tailwind.config.ts</strong> and the <strong>heroSlides</strong> seed in
+    <strong>lib/content/site-config.ts</strong>. Photography is the real repository photography. Class prefixes
+    map one to one onto the components this ports to, so the port is mechanical:
+    SlideshowStage, CapsuleShell, CapsuleMedia, CapsuleContent, CapsuleActions, SlideshowControls, and a headless
+    SlideshowController that can wrap content which is not a hero at all.
+  </p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ======================================================================
+     SLIDE DATA — verbatim from heroSlides in lib/content/site-config.ts.
+     accent is the per-slide identity colour used for the ring, bloom, rule
+     and active pager bar.
+     ====================================================================== */
+  var SLIDES = [
+    {
+      id:"slide-students",
+      eyebrow:"For young Ghanaians",
+      heading:"Build practical digital skills. Gain confidence. Shape your future.",
+      body:"Cohort-based training in Accra for young people ready to move from curiosity to real digital careers, entrepreneurship, or further study. 3,000+ youth trained. 85% of graduates progress into work, learning, or enterprise within six months.",
+      tag:"Graduation day, Accra",
+      overlayFrom:"rgba(10,15,40,0.88)",
+      overlayTo:"rgba(10,15,40,0.35)",
+      accent:"#1E72BA",
+      cta:{
+        primary:{label:"Apply for Cohort 8", href:"/apply-for-training/courses"},
+        secondary:{label:"See who can apply", href:"/apply-for-training/who-can-apply"}
+      }
+    },
+    {
+      id:"slide-partners",
+      eyebrow:"For partners & supporters",
+      heading:"Invest in Ghana's next generation of digital talent.",
+      body:"3,000+ youth trained. 8,500+ students reached through school and community partnerships. 40% female participation. Your support funds scholarships, devices, mentorship, and measurable pathways into work and enterprise.",
+      tag:"Practical session, group work",
+      overlayFrom:"rgba(5,25,15,0.88)",
+      overlayTo:"rgba(5,25,15,0.40)",
+      accent:"#D70B52",
+      cta:{
+        primary:{label:"Donate to Cohort 8", href:"/donate"},
+        secondary:{label:"See our impact", href:"/our-impact/reports"}
+      }
+    },
+    {
+      id:"slide-organisations",
+      eyebrow:"For organisations",
+      heading:"Train your teams. Sponsor talent. Hire job-ready graduates.",
+      body:"Partner with IT For Youth Ghana for corporate training, staff volunteering, scholarship sponsorship, or direct access to graduates who have built portfolios and demonstrated real project delivery.",
+      tag:"Cohort workstations, Accra",
+      overlayFrom:"rgba(30,15,5,0.88)",
+      overlayTo:"rgba(30,15,5,0.40)",
+      accent:"#0152BE",
+      cta:{
+        primary:{label:"Work with us", href:"/for-organisations"},
+        secondary:{label:"Hire our graduates", href:"/for-organisations/hire-graduates"}
+      }
+    }
+  ];
+
+  var INTERVAL = 6000;
+  var TICK = 50;
+
+  /* splitHeading — ported verbatim from components/home/hero-slideshow.tsx
+     so the prototype and production agree on where a headline breaks. */
+  function splitHeading(heading){
+    var words = heading.trim().split(/\s+/);
+    if (words.length <= 2) return { first: heading, second: "" };
+    var splitPoint = Math.max(1, Math.ceil(words.length * 0.52));
+    return {
+      first: words.slice(0, splitPoint).join(" "),
+      second: words.slice(splitPoint).join(" ")
+    };
+  }
+
+  var root      = document.documentElement;
+  var stage     = document.getElementById("hero");
+  if (!stage) return;
+
+  var q = function(sel){ return stage.querySelector(sel); };
+  var qa = function(sel){ return Array.prototype.slice.call(stage.querySelectorAll(sel)); };
+
+  var stageLayers = qa("[data-stage-layer]");
+  var lensShots   = qa("[data-lens-shot]");
+  var pagerBars   = qa("[data-goto]");
+  var ring        = q("[data-progress-ring]");
+  var live        = q("[data-live]");
+  var toggleBtn   = q("[data-toggle]");
+  var toggleGlyph = q("[data-toggle-glyph]");
+
+  var el = {
+    eyebrow:  q("[data-slide-eyebrow]"),
+    lead:     q("[data-slide-heading-lead]"),
+    tail:     q("[data-slide-heading-tail]"),
+    body:     q("[data-slide-body]"),
+    tag:      q("[data-capsule-tag]"),
+    count:    q("[data-count-current]"),
+    ctaP:     q("[data-cta-primary]"),
+    ctaPL:    q("[data-cta-primary-label]"),
+    ctaS:     q("[data-cta-secondary]"),
+    ctaSL:    q("[data-cta-secondary-label]")
+  };
+
+  var motionQuery  = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var reduceMotion = motionQuery.matches;
+
+  var current   = 0;
+  var progress  = 0;
+  var advanceId = null;
+  var tickId    = null;
+  var hovering  = false;
+  var userPaused = false;
+
+  /* ---------------------------------------------------------------- timers */
+  function stopTimer(){
+    if (advanceId) { clearInterval(advanceId); advanceId = null; }
+    if (tickId)    { clearInterval(tickId);    tickId = null; }
+  }
+
+  function canAutoplay(){
+    return !reduceMotion && !userPaused && SLIDES.length > 1;
+  }
+
+  function startTimer(){
+    stopTimer();
+    progress = 0;
+    paintProgress();
+    if (!canAutoplay() || hovering) return;
+
+    advanceId = setInterval(function(){ goTo(current + 1, false); }, INTERVAL);
+
+    var step = 100 / (INTERVAL / TICK);
+    tickId = setInterval(function(){
+      progress = Math.min(progress + step, 100);
+      paintProgress();
+    }, TICK);
+  }
+
+  function paintProgress(){
+    if (!ring) return;
+    // stroke-dashoffset against pathLength=100 -> offset is the remainder.
+    ring.setAttribute("stroke-dashoffset", String(100 - progress));
+  }
+
+  /* ---------------------------------------------------------------- render */
+  function render(){
+    var slide = SLIDES[current];
+    var parts = splitHeading(slide.heading);
+
+    // Per-slide identity. No geometry moves; only colour and content change.
+    root.style.setProperty("--slide-from",   slide.overlayFrom);
+    root.style.setProperty("--slide-to",     slide.overlayTo);
+    root.style.setProperty("--slide-accent", slide.accent);
+    if (ring) ring.setAttribute("stroke", slide.accent);
+
+    stageLayers.forEach(function(layer, i){
+      layer.classList.toggle("is-active", i === current);
+    });
+    lensShots.forEach(function(shot, i){
+      var active = i === current;
+      shot.classList.toggle("is-active", active);
+      shot.setAttribute("aria-hidden", active ? "false" : "true");
+    });
+
+    el.eyebrow.textContent = slide.eyebrow;
+    el.lead.textContent    = parts.first;
+    el.tail.textContent    = parts.second;
+    el.tail.style.display  = parts.second ? "" : "none";
+    el.body.textContent    = slide.body;
+    el.tag.textContent     = slide.tag;
+
+    el.ctaPL.textContent = slide.cta.primary.label;
+    el.ctaP.setAttribute("href", slide.cta.primary.href);
+
+    if (slide.cta.secondary) {
+      el.ctaSL.textContent = slide.cta.secondary.label;
+      el.ctaS.setAttribute("href", slide.cta.secondary.href);
+      el.ctaS.hidden = false;
+    } else {
+      el.ctaS.hidden = true;
+    }
+
+    el.count.textContent = String(current + 1).padStart(2, "0");
+    pagerBars.forEach(function(bar, i){
+      bar.setAttribute("aria-current", i === current ? "true" : "false");
+    });
+
+    if (live) {
+      live.textContent = "Slide " + (current + 1) + " of " + SLIDES.length + ": " + slide.heading;
+    }
+  }
+
+  function goTo(index, restart){
+    var total = SLIDES.length;
+    var next = ((index % total) + total) % total;
+    if (next !== current) {
+      current = next;
+      render();
+    }
+    if (restart) startTimer();
+    else { progress = 0; paintProgress(); }
+  }
+
+  /* --------------------------------------------------------------- controls */
+  q("[data-prev]").addEventListener("click", function(){ goTo(current - 1, true); });
+  q("[data-next]").addEventListener("click", function(){ goTo(current + 1, true); });
+  pagerBars.forEach(function(bar){
+    bar.addEventListener("click", function(){
+      goTo(parseInt(bar.getAttribute("data-goto"), 10), true);
+    });
+  });
+
+  function paintToggle(){
+    var paused = userPaused || reduceMotion;
+    toggleBtn.setAttribute("aria-pressed", paused ? "true" : "false");
+    toggleBtn.setAttribute("aria-label", paused ? "Play slideshow" : "Pause slideshow");
+    toggleGlyph.className = paused ? "ctrl__play" : "ctrl__pause";
+    toggleGlyph.innerHTML = paused ? "" : "<i></i><i></i>";
+  }
+  toggleBtn.addEventListener("click", function(){
+    userPaused = !userPaused;
+    paintToggle();
+    if (userPaused) { stopTimer(); progress = 0; paintProgress(); }
+    else startTimer();
+  });
+
+  q("[data-scroll-cue]").addEventListener("click", function(){
+    var target = document.getElementById("after-hero");
+    if (target) target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  });
+
+  /* Hover pause — preserved from the current implementation. */
+  stage.addEventListener("mouseenter", function(){ hovering = true; stopTimer(); });
+  stage.addEventListener("mouseleave", function(){ hovering = false; startTimer(); });
+
+  /* Focus pause: a keyboard user tabbing into the hero should not have the
+     slide change under them mid-read. */
+  stage.addEventListener("focusin",  function(){ hovering = true; stopTimer(); });
+  stage.addEventListener("focusout", function(event){
+    if (stage.contains(event.relatedTarget)) return;
+    hovering = false; startTimer();
+  });
+
+  /* Arrow keys — preserved, but no longer hijacked from text entry. */
+  function isTypingTarget(node){
+    if (!node) return false;
+    if (node.isContentEditable) return true;
+    var tag = node.tagName;
+    return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
+  }
+  window.addEventListener("keydown", function(event){
+    if (SLIDES.length <= 1) return;
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+    if (isTypingTarget(event.target)) return;
+    if (event.key === "ArrowLeft")  goTo(current - 1, true);
+    if (event.key === "ArrowRight") goTo(current + 1, true);
+  });
+
+  /* Touch swipe — preserved. */
+  var touchX = null;
+  stage.addEventListener("touchstart", function(event){
+    touchX = event.touches[0] ? event.touches[0].clientX : null;
+    stopTimer();
+  }, { passive: true });
+  stage.addEventListener("touchend", function(event){
+    var endX = event.changedTouches[0] ? event.changedTouches[0].clientX : null;
+    if (touchX === null || endX === null) { startTimer(); touchX = null; return; }
+    var delta = touchX - endX;
+    if (Math.abs(delta) > 50) goTo(current + (delta > 0 ? 1 : -1), true);
+    else startTimer();
+    touchX = null;
+  }, { passive: true });
+
+  /* Do not burn timers while the tab is hidden. */
+  document.addEventListener("visibilitychange", function(){
+    if (document.hidden) stopTimer();
+    else if (!hovering) startTimer();
+  });
+
+  /* React to the user changing their motion preference mid-session. */
+  var onMotionChange = function(){
+    reduceMotion = motionQuery.matches;
+    paintToggle();
+    if (reduceMotion) { stopTimer(); progress = 0; paintProgress(); }
+    else startTimer();
+  };
+  if (motionQuery.addEventListener) motionQuery.addEventListener("change", onMotionChange);
+  else if (motionQuery.addListener) motionQuery.addListener(onMotionChange);
+
+  render();
+  paintToggle();
+  startTimer();
+})();
+</script>
+
+</body>
+</html>
